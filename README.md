@@ -1,0 +1,1 @@
+# Modelo_IA_Proyecto_Mineria
