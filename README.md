@@ -5,4 +5,4 @@ Proyecto inicial para Programa Profesionales jóvenes, basado en en análisis de
 ⸜(｡˃ ᵕ ˂ )⸝♡
 aaa1234
 hola
-https://github.com/vgamboa-sys/Modelo_IA_Proyecto_Mineria.git
+
