@@ -4,4 +4,5 @@ Proyecto inicial para Programa Profesionales jóvenes, basado en en análisis de
 
 ⸜(｡˃ ᵕ ˂ )⸝♡
 aaa1234
+hola
 Modelo-IA-Proyecto-Mineria
