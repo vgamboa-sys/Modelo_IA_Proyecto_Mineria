@@ -22,9 +22,11 @@ class DatosClimaticosMina(BaseModel):
     ciudad: str
     temperatura_c: float
     humedad_pct: int
+    presion_hpa: int
     visibilidad_mts: int
     nubes_pct: int
     viento_velocidad_ms: float
+    viento_direccion_deg: int
     viento_rafaga_ms: Optional[float] = 0.0
     lluvia_1h_mm: Optional[float] = 0.0
     nieve_1h_mm: Optional[float] = 0.0
@@ -73,10 +75,12 @@ async def get_datos_fuente_para_ia():
             ciudad=data_clima.get('name', MINA_CIUDAD),
             temperatura_c=main.get('temp', 0),
             humedad_pct=main.get('humidity', 0),
+            presion_hpa=main.get('pressure', 0),
             visibilidad_mts=data_clima.get('visibility', 10000), # Visibilidad
             nubes_pct=clouds.get('all', 0),                 # Nubosidad
             
             viento_velocidad_ms=wind.get('speed', 0),       # Viento
+            viento_direccion_deg=wind.get('deg', 0),
             viento_rafaga_ms=wind.get('gust', 0),           # Ráfagas
             
             # .get('rain', {}) para evitar error si 'rain' no existe
