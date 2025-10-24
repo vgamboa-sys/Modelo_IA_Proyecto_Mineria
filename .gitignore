@@ -1,0 +1,32 @@
+# Entornos virtuales
+venv/
+.env/
+.env.*
+
+# Archivos de Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Archivos de sistema (Windows, macOS, Linux)
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Carpeta de descargas o outputs locales
+downloads/
+output/
+tmp/
+temp/
+
+# Configuración de IDEs
+.vscode/
+.idea/
+*.iml
+
+
+
