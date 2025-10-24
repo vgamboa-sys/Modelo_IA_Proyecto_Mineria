@@ -1,0 +1,8 @@
+# Para la API de datos (main.py)
+fastapi
+uvicorn
+requests
+python-dotenv
+
+#para instalar:
+#pip install -r requirements.txt
