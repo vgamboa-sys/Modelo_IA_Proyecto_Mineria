@@ -1,4 +1,4 @@
-# 🦺 SafeMine AI (Modelo_IA_Proyecto_Mineria)
+# 🦺 SafeMine AI
 
 **SafeMine AI** utiliza Inteligencia Artificial para analizar datos meteorológicos.  
 Su objetivo es **generar alertas preventivas diarias y automáticas** para mejorar la **seguridad laboral** en la industria minera.
