@@ -3,9 +3,8 @@ import os
 import requests
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import Optional
 from dotenv import load_dotenv
+from models.weather import DatosClimaticosMina
 
 #c --- Configuración ---
 
@@ -15,29 +14,6 @@ API_KEY = os.getenv("OPENWEATHER_API_KEY")
 MINA_LAT = -33.1431
 MINA_LON = -70.2747
 MINA_CIUDAD = "Mina Los Bronces"
-
-# --- Modelo de Datos ---
-
-class DatosClimaticosMina(BaseModel):
-    ciudad: str
-    temperatura_c: float
-    humedad_pct: int
-    presion_hpa: int
-    visibilidad_mts: int
-    nubes_pct: int
-    viento_velocidad_ms: float
-    viento_direccion_deg: int
-    viento_rafaga_ms: Optional[float] = 0.0
-    lluvia_1h_mm: Optional[float] = 0.0
-    nieve_1h_mm: Optional[float] = 0.0
-    polucion_pm10: float
-    polucion_pm2_5: float
-    polucion_co: float
-    polucion_so2: float
-    polucion_no2: float
-    polucion_o3: float
-    polucion_nh3: float
-
 
 app = FastAPI(
     title="SafeMine AI Data Clima",
@@ -110,7 +86,7 @@ async def get_datos_fuente_para_ia():
 if __name__ == "__main__":
     print("--- Iniciando Servidor de Datos SafeMine (Solo Datos) ---")
     print(f"URL API: http://127.0.0.1:8000{app.routes[4].path}")
-    print(f"Documentación:  http://127.0.0.1:8000/docs")
+    print("Documentación:  http://127.0.0.1:8000/docs")
     print("----------------------------------------------------------")
     
     # Esto inicia el servidor
