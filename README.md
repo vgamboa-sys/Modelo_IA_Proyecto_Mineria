@@ -105,7 +105,7 @@ Para observar la documentación de la api este es el enlace:
 
 Luego para ver lo que esta mostrando la api directamente:
 
-> 🌐 [http://127.0.0.1:8000/api/alertas/actual](http://127.0.0.1:8000/api/alertas/actual)
+> 🌐 [http://127.0.0.1:8000/api/alertas/actual](http://127.0.0.1:8000/datos/api/alertas/actual)
 
 ---
 
