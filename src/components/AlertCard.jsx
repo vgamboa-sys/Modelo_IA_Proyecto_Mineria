@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const colorMap = {
+export const colorMap = {
   Alta: {
     bg: 'bg-red-100',
     border: 'border-red-200',

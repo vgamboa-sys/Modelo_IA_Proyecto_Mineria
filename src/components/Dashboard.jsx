@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from './Header';
-import AlertCard from './AlertCard';
+import AlertCard, {colorMap} from './AlertCard';
 import FilterButton from './Filter';
 import AlertModal from './AlertModal'; 
 
@@ -31,7 +31,7 @@ const alertData = [
     severityText: 'Equipo de Seguridad',
     title: 'Recuerda usar el equipo adecuado',
     location: 'Planta de Producción C',
-    timestamp: 'Actualizado: 15 de Abril, 2024 - 03:00 PM',
+    timestamp: '15 de Abril, 2024 - 03:00 PM',
   },
 ];
 
@@ -42,6 +42,11 @@ function Dashboard() {
   const severityOptions = ['Todas', 'Alta', 'Media', 'Baja', 'Equipo'];
 
   const [selectedAlert, setSelectedAlert] = useState(null);
+
+  const getBadgeClasses = (sev) => {
+    const c = colorMap[sev] || { bg: 'bg-gray-100', text: 'text-gray-800' };
+    return `${c.bg} ${c.text}`;
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 relative">
@@ -62,7 +67,7 @@ function Dashboard() {
             selected={selectedSeverity}
             onSelect={setSelectedSeverity}
             />
-          <FilterButton label="Ubicación" />
+          {/*<FilterButton label="Ubicación" />*/}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
@@ -74,21 +79,73 @@ function Dashboard() {
               severity={alert.severity}
               severityText={alert.severityText}
               title={alert.title}
-              location={alert.location}
+              //{/*location={alert.location}*/}
               timestamp={alert.timestamp}
               onShowDetails={() => setSelectedAlert(alert)}
             />
           ))}
         </div>
 
-        {/* Sección del Histórico o historial*/}
+        {/* Sección del Reporte de Alertas*/}
         <div className="mt-8 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Historico de Alertas</h2>
-          <div className="bg-gray-200 rounded-lg h-64 sm:h-96 flex items-center justify-center">
-            <p className="text-gray-500 px-4 text-center">
-              [Aquí iría el componente del historico de eventos o alertas por usuario]
-            </p>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Reporte de Alertas</h2>
+          
+          {/*Tabla de Reporte de Alertas Responsive*/}
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full align-middle">
+              <div className="overflow-hidden border border-gray-200 rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-500">
+                    <tr className="text-white text-left text-xs font-medium uppercase tracking-wider">
+                      <th scope="col" className="px-4 py-3">
+                        Criticidad
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        Título
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        Fecha y Hora
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {alertData.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="px-4 py-4 text-sm text-center text-gray-500">
+                          No hay alertas para mostrar
+                        </td>
+                      </tr>
+                    ) : (
+                      alertData.map((alert) => (
+                        <tr key={alert.title} className="hover:bg-gray-50">
+                          <td className="px-4 py-4 whitespace-nowrap text-sm">
+                            <span className={`inline-flex items-center px-8 py-0.5 rounded-es-xs text-xs font-medium ${getBadgeClasses(alert.severity)}`}>
+                              {alert.severityText}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-900">
+                            {alert.title}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500">
+                            {alert.timestamp}
+                          </td>
+                          {/*<td className="px-4 py-4 text-right text-sm font-medium">
+                            <button
+                              onClick={() => setSelectedAlert(alert)}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              Ver detalles
+                            </button>
+                          </td>*/}
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
+        
         </div>
       </main>
 
