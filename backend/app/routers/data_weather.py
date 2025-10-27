@@ -10,9 +10,9 @@ load_dotenv()
 
 API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
-MINA_LAT = -33.1431
-MINA_LON = -70.2747
-MINA_CIUDAD = "Mina Los Bronces"
+MINA_LAT = -20.9914
+MINA_LON = -68.6386
+MINA_CIUDAD = "Mina Collahuasi"
 
 @router.get("/api/alertas/actual", response_model=DatosClimaticosMina)
 async def get_datos_fuente_para_ia():
