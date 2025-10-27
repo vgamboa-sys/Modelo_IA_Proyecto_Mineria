@@ -1,0 +1,18 @@
+{
+    "ciudad": "Mina Los Bronces",
+    "temperatura_c": -5.12,
+    "humedad_pct": 59,
+    "visibilidad_mts": 6967,
+    "nubes_pct": 100,
+    "viento_velocidad_ms": 4.08,
+    "viento_rafaga_ms": 7.02,
+    "lluvia_1h_mm": 0,
+    "nieve_1h_mm": 0.13,
+    "polucion_pm10": 12.27,
+    "polucion_pm2_5": 9.32,
+    "polucion_co": 155.28,
+    "polucion_so2": 1,
+    "polucion_no2": 2.56,
+    "polucion_o3": 54.16,
+    "polucion_nh3": 3.51
+}
