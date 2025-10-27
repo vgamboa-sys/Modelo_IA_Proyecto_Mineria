@@ -31,7 +31,7 @@ const alertData = [
     severity: 'Equipo',
     severityText: 'Equipo de Seguridad',
     title: 'Recuerda usar el equipo adecuado',
-    location: 'Planta de Producción C',
+    //location: 'Planta de Producción C',
     timestamp: 'Actualizado: 15 de Abril, 2024 - 03:00 PM',
   },
 ];
@@ -90,7 +90,7 @@ function Dashboard() {
               severity={alert.severity}
               severityText={alert.severityText}
               title={alert.title}
-              location={alert.location}
+              /*location={alert.location}*/
               timestamp={alert.timestamp}
             />
           ))}
