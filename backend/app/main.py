@@ -4,7 +4,7 @@ import requests
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv
-from models.weather import DatosClimaticosMina
+from schemas.weather import DatosClimaticosMina
 
 #c --- Configuración ---
 
