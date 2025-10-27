@@ -6,29 +6,43 @@ function Header() {
   // Estado para controlar el menú móvil
   const [isOpen, setIsOpen] = useState(false);
 
+  // Función para determinar si una ruta está activa
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isActive = (route) => pathname === route;
+
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-slate-600 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo y Título */}
           <div className="flex-shrink-0 flex items-center">
-            <ShieldCheckIcon className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold text-gray-800">
-              Climate Alerts
-            </span>
+              
+            <a href="/" className="flex items-center">
+              <img src="/icon.png" alt="SafeMine Logo" className="h-10 w-9" />
+              <span className="ml-2 text-xl font-sans text-white hidden sm:inline">SafeMine AI</span>
+            </a>
           </div>
+          
 
           {/* Links de Navegación (Desktop) */}
           <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
             <a
-              href="#"
-              className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              href="/"
+              className={`text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                isActive('/')
+                ?'border-white text-orange-400' 
+                : 'border-transparent hover:border-white hover:text-orange-400'
+              }`}
             >
-              Mapa
+              Inicio
             </a>
             <a
-              href="#"
-              className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              href="/reporte"
+              className={`text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                isActive('/reporte')
+                ? 'border-white text-orange-400'
+                : 'border-transparent hover:border-white hover:text-orange-400'
+              }`}
             >
               Reportes
             </a>
@@ -39,7 +53,7 @@ function Header() {
             {/* Ícono de Usuario (Siempre visible) */}
             <button
               type="button"
-              className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="p-1 rounded-full text-white hover:text-orange-400"
             >
               <span className="sr-only">Ver perfil</span>
               <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
@@ -50,7 +64,7 @@ function Header() {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                className="inline-flex items-center justify-center p-2 text-white"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
               >
@@ -73,14 +87,22 @@ function Header() {
       >
         <div className="pt-2 pb-3 space-y-1 px-2">
           <a
-            href="#"
-            className="bg-blue-50 border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+            href="/"
+            className={`text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+              isActive('/')
+              ? 'border-white text-orange-400'
+              : 'border-transparent hover:border-white hover:text-orange-400'
+            }`}
           >
-            Mapa
+            Inicio
           </a>
           <a
-            href="#"
-            className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+            href="/reporte"
+            className={`text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+              isActive('/reporte')
+              ? 'border-white text-orange-400'
+              : 'border-transparent hover:border-white hover:text-orange-400'
+            }`}
           >
             Reportes
           </a>

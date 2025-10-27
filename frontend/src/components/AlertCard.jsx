@@ -3,28 +3,28 @@ import React from 'react';
 // Objeto para mapear la severidad a las clases de Tailwind
 const colorMap = {
   Alta: {
-    bg: 'bg-red-50',
+    bg: 'bg-red-100',
     border: 'border-red-200',
     text: 'text-red-700',
-    button: 'bg-red-100 text-red-800 hover:bg-red-200',
+    button: 'bg-red-200 text-red-800 hover:bg-red-300',
   },
   Media: {
-    bg: 'bg-orange-50',
-    border: 'border-orange-200',
-    text: 'text-orange-700',
-    button: 'bg-orange-100 text-orange-800 hover:bg-orange-200',
-  },
-  Baja: {
-    bg: 'bg-yellow-50',
+    bg: 'bg-yellow-100',
     border: 'border-yellow-200',
     text: 'text-yellow-700',
-    button: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
+    button: 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300',
   },
-  Normal: {
-    bg: 'bg-green-50',
+  Baja: {
+    bg: 'bg-green-100',
     border: 'border-green-200',
     text: 'text-green-700',
-    button: 'bg-green-100 text-green-800 hover:bg-green-200',
+    button: 'bg-green-200 text-green-800 hover:bg-green-300',
+  },
+  Equipo: {
+    bg: 'bg-blue-100',
+    border: 'border-blue-200',
+    text: 'text-blue-700',
+    button: 'bg-blue-200 text-blue-800 hover:bg-blue-300',
   },
 };
 
