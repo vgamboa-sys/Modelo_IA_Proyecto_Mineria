@@ -2,7 +2,7 @@
 
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-from routers import data_weather
+from routers import data_weather, cnx_IA
 
 # --- Configuración ---
 app = FastAPI(
@@ -12,6 +12,7 @@ app = FastAPI(
 
 # --- Agregar routers ---
 app.include_router(data_weather.router, prefix="/datos", tags=["Datos Clima"])
+app.include_router(cnx_IA.router, prefix="/datos", tags=["Datos Clima"])
 
 # --- Página Principal ---
 @app.get("/",tags=["Ruta /"])
