@@ -1,32 +1,24 @@
-# Entornos virtuales
-venv/
-.env/
-.env.*
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Archivos de Python compilados
-__pycache__/
-*.py[cod]
-*$py.class
+node_modules
+dist
+dist-ssr
+*.local
 
-# Archivos de Jupyter Notebook checkpoints
-.ipynb_checkpoints
-
-# Archivos de sistema (Windows, macOS, Linux)
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-Thumbs.db
-*.swp
-*.swo
-
-# Carpeta de descargas o outputs locales
-downloads/
-output/
-tmp/
-temp/
-
-# Configuración de IDEs
-.vscode/
-.idea/
-*.iml
-
-
-
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
