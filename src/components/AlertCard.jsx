@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Objeto para mapear la severidad a las clases de Tailwind
+
 const colorMap = {
   Alta: {
     bg: 'bg-red-100',
@@ -28,9 +28,8 @@ const colorMap = {
   },
 };
 
-function AlertCard({ severity, severityText, title, location, timestamp }) {
-  // Obtener las clases de color correctas, con un fallback 'Normal'
-  const colors = colorMap[severity] || colorMap.Normal;
+function AlertCard({ severity, severityText, title, location, timestamp, onShowDetails }) {
+  const colors = colorMap[severity] || colorMap.Normal; 
 
   return (
     <div
@@ -46,7 +45,8 @@ function AlertCard({ severity, severityText, title, location, timestamp }) {
       
       <button
         type="button"
-        className={`mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${colors.button}`}
+        onClick={onShowDetails} 
+        className={`mt-4 w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors ${colors.button}`}
       >
         Ver Detalles
       </button>

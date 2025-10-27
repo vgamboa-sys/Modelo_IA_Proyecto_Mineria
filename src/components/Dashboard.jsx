@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import AlertCard from './AlertCard';
-//import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import FilterButton from './Filter';
+import AlertModal from './AlertModal'; 
 
-// Datos de ejemplo para las alertas
 const alertData = [
   {
     severity: 'Alta',
@@ -42,12 +41,13 @@ function Dashboard() {
   const [selectedSeverity, setSelectedSeverity] = useState('Todas');
   const severityOptions = ['Todas', 'Alta', 'Media', 'Baja', 'Equipo'];
 
+  const [selectedAlert, setSelectedAlert] = useState(null);
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 relative">
       <Header />
       
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Título y Subtítulo */}
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Alertas
         </h1>
@@ -55,7 +55,6 @@ function Dashboard() {
           Alertas activas y su nivel de criticidad.
         </p> 
 
-        {/* Filtros */}
         <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 my-6">
           <FilterButton 
             label="Criticidad" 
@@ -63,27 +62,12 @@ function Dashboard() {
             selected={selectedSeverity}
             onSelect={setSelectedSeverity}
             />
-          {/*<FilterButton label="Tipo de Alerta" /> Creo que los filtros severidad y tipo de alerta es lo mismo*/}
           <FilterButton label="Ubicación" />
         </div>
 
-        {/* Grilla de Alertas */}
-        {/*<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {alertData.map((alert) => (
-            <AlertCard
-              key={alert.title}
-              severity={alert.severity}
-              severityText={alert.severityText}
-              title={alert.title}
-              location={alert.location}
-              timestamp={alert.timestamp}
-            />
-          ))}
-        </div>*/}
-        {/* Grilla de Alertas Filtradas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
           {alertData.filter((alert) => 
-          selectedSeverity === 'Todas' || alert.severity === selectedSeverity
+            selectedSeverity === 'Todas' || alert.severity === selectedSeverity
           ).map((alert) => (
             <AlertCard
               key={alert.title}
@@ -92,11 +76,12 @@ function Dashboard() {
               title={alert.title}
               location={alert.location}
               timestamp={alert.timestamp}
+              onShowDetails={() => setSelectedAlert(alert)}
             />
           ))}
         </div>
 
-        {/* Sección del Mapa o lo que sea*/}
+        {/* Sección del Histórico o historial*/}
         <div className="mt-8 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Historico de Alertas</h2>
           <div className="bg-gray-200 rounded-lg h-64 sm:h-96 flex items-center justify-center">
@@ -106,6 +91,11 @@ function Dashboard() {
           </div>
         </div>
       </main>
+
+      <AlertModal 
+        alert={selectedAlert}
+        onClose={() => setSelectedAlert(null)}
+      />
     </div>
   );
 }
