@@ -17,7 +17,6 @@ function AlertModal({ alert, onClose }) {
         className="relative z-50 mx-4 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
         onClick={handleContentClick}
       >
-        {/* Botón de Cerrar (Esquina) */}
         <button
           type="button"
           className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-700 text-white transition hover:bg-gray-900"
@@ -44,6 +43,7 @@ function AlertModal({ alert, onClose }) {
             <strong>Protocolo de Acción:</strong> {alert.severity === 'Alta' ? 'Evacuación Inmediata' : 'Monitoreo y Precaución'}.
           </p>
           <p>
+            {/* Texto de ejemplo lorem */}
             <strong>Descripción:</strong>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             posuere erat a ante. Pellentesque ultrices, dui eget

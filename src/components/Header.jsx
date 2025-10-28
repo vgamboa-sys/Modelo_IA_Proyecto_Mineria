@@ -3,10 +3,9 @@ import { UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outlin
 import { ShieldCheckIcon } from '@heroicons/react/24/solid';
 
 function Header() {
-  // Estado para controlar el menú móvil
   const [isOpen, setIsOpen] = useState(false);
 
-  // Función para determinar si una ruta está activa
+  // Función para determinar si una ruta está activa (Falta ver si la pagina sera de una sola vista o no)
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const isActive = (route) => pathname === route;
 
