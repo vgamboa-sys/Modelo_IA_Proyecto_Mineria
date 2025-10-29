@@ -109,4 +109,4 @@ Luego para ver lo que esta mostrando la api directamente:
 
 ---
 
-🪨 *“Prevenir con datos es salvar vidas.”*
+*“Prevenir con datos es salvar vidas.”*
