@@ -2,17 +2,18 @@
 
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-from routers import data_weather, cnx_IA
+from routers import data_weather, cnx_IA, cnx_IA_copy
 
 # --- Configuración ---
 app = FastAPI(
     title="SafeMine AI Data Clima",
-    description="API que obtiene datos de clima y polución desde OWM."
+    description="API que obtiene datos de clima y polución desde OWM, estos datos los analiza con Gemini (IA) y entrega recomendaciones de seguridad basads en ellas."
 )
 
 # --- Agregar routers ---
 app.include_router(data_weather.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(cnx_IA.router, prefix="/datos", tags=["Datos Clima"])
+app.include_router(cnx_IA_copy.router, prefix="/datos", tags=["Datos Clima"])
 
 # --- Página Principal ---
 @app.get("/",tags=["Ruta /"])
