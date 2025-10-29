@@ -39,7 +39,7 @@ class Sismos(Base):
     magnitud = Column(Float)
     profundidad = Column(Float)
 
-    # Clave foránea a Mina (nullable según el ERD)
+    # Clave foránea a Mina 
     id_mina = Column(BigInteger, ForeignKey("mina.id"), nullable=True)
 
     # Relaciones
