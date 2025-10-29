@@ -1,8 +1,12 @@
-# Archivo: main.py
-
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-from routers import data_weather, cnx_IA
+from routers import data_weather, cnx_IA 
+
+# --- Base de Datos ---
+from database.db import engine
+from models import models  # Importa modelos de DB
+
+models.Base.metadata.create_all(bind=engine)  # Crea tablas en la DB si no existen
 
 # --- Configuración ---
 app = FastAPI(
