@@ -1,8 +1,6 @@
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-<<<<<<< HEAD
 from routers import data_weather, cnx_IA, cnx_IA_copy
-=======
 from routers import data_weather, cnx_IA 
 
 # --- Base de Datos ---
@@ -10,7 +8,7 @@ from database.db import engine
 from models import models  # Importa modelos de DB
 
 models.Base.metadata.create_all(bind=engine)  # Crea tablas en la DB si no existen
->>>>>>> 749217117bda6bcd272b381108aa9f1255c5617c
+
 
 # --- Configuración ---
 app = FastAPI(
