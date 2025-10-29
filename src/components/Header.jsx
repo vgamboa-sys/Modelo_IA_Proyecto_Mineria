@@ -35,7 +35,7 @@ function Header() {
             >
               Inicio
             </a>
-            <a
+            {/*<a
               href="/reporte"
               className={`text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                 isActive('/reporte')
@@ -44,19 +44,19 @@ function Header() {
               }`}
             >
               Reportes
-            </a>
+            </a>*/}
           </div>
 
           {/* Íconos de la derecha (Usuario + Menú Móvil) */}
           <div className="flex items-center">
             {/* Ícono de Usuario (Siempre visible) */}
-            <button
+            {/*<button
               type="button"
               className="p-1 rounded-full text-white hover:text-orange-400"
             >
               <span className="sr-only">Ver perfil</span>
               <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
-            </button>
+            </button>*/}
 
             {/* Botón de Menú Móvil (Solo en 'sm' y más pequeño) */}
             <div className="ml-2 sm:hidden">
@@ -95,7 +95,7 @@ function Header() {
           >
             Inicio
           </a>
-          <a
+          {/*<a
             href="/reporte"
             className={`text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
               isActive('/reporte')
@@ -104,7 +104,7 @@ function Header() {
             }`}
           >
             Reportes
-          </a>
+          </a>*/}
         </div>
       </div>
     </nav>

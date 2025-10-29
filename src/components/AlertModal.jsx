@@ -1,5 +1,6 @@
 import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { colorMap } from './AlertCard';
 
 function AlertModal({ alert, onClose }) {
   if (!alert) return null;
@@ -10,11 +11,12 @@ function AlertModal({ alert, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-black/80"
       onClick={onClose} 
-    >
+    >                                                                                             {/*aca va el border segun la severidad*/}
       <div
-        className="relative z-50 mx-4 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
+        className={`relative z-50 mx-4 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl border-4
+          ${colorMap[alert.severity]?.border || "border-gray-200"}`}
         onClick={handleContentClick}
       >
         <button
