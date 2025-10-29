@@ -1,7 +1,6 @@
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
 from routers import data_weather, cnx_IA, cnx_IA_copy
-from routers import data_weather, cnx_IA 
 
 # --- Base de Datos ---
 from database.db import engine
