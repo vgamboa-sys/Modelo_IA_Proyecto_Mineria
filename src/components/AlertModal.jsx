@@ -1,6 +1,6 @@
-import React from 'react';
-import { XMarkIcon } from '@heroicons/react/24/solid';
-import { colorMap } from './AlertCard';
+import React from "react";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import { colorMap } from "./AlertCard";
 
 function AlertModal({ alert, onClose }) {
   if (!alert) return null;
@@ -12,11 +12,11 @@ function AlertModal({ alert, onClose }) {
   return (
     <div
       className="fixed inset-0 z-40 flex items-center justify-center bg-black/80"
-      onClick={onClose} 
-    >                                                                                             {/*aca va el border segun la severidad*/}
+      onClick={onClose}
+    >
       <div
         className={`relative z-50 mx-4 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl border-4
-          ${colorMap[alert.severity]?.border || "border-gray-200"}`}
+ ${colorMap[alert.severity]?.border || "border-gray-200"}`}
         onClick={handleContentClick}
       >
         <button
@@ -30,30 +30,26 @@ function AlertModal({ alert, onClose }) {
 
         {/* Contenido del Modal */}
         <h3 className="text-2xl font-bold text-gray-900">{alert.title}</h3>
-        <p className="mt-1 text-sm text-gray-600">
-          {alert.location} - <span className="text-gray-500">{alert.timestamp}</span>
-        </p>
+
+        <p className="mt-1 text-sm text-gray-500">{alert.timestamp}</p>
 
         <hr className="my-4" />
 
-        {/* Aquí va la "información adicional" */}
         <div className="space-y-3 text-gray-700">
           <p>
-            <strong>Reportado por:</strong> Centro de Control A
+            <strong>Protocolo de Acción:</strong>{" "}
+            {alert.severity === "Alta"
+              ? "Evacuación Inmediata"
+              : "Monitoreo y Precaución"}
+            .
           </p>
           <p>
-            <strong>Protocolo de Acción:</strong> {alert.severity === 'Alta' ? 'Evacuación Inmediata' : 'Monitoreo y Precaución'}.
-          </p>
-          <p>
-            {/* Texto de ejemplo lorem */}
             <strong>Descripción:</strong>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere erat a ante. Pellentesque ultrices, dui eget
-            ultricies, felis nisl varius, vitae...
+            posuere erat a ante. Pellentesque ultrices, dui eget ultricies,
+            felis nisl varius, vitae...
           </p>
         </div>
-
-
       </div>
     </div>
   );
