@@ -86,7 +86,7 @@ function Dashboard() {
   // Opciones de criticidad para el filtro
   const severityOptions = ["Todas", "Alta", "Media", "Baja"];
   // Estado para secciones colapsables
-  const [openSection, setOpenSection] = useState("Alta");
+  const [openSection, setOpenSection] = useState(null);
   const [selectedAlert, setSelectedAlert] = useState(null);
 
   const getBadgeClasses = (sev) => {
