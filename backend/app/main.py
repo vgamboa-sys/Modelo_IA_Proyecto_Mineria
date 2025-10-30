@@ -18,6 +18,8 @@ Incluye los siguientes endpoints:
     y devuelve una lista de alertas generada por IA (De manera General).
 * **/data_to_gemini_test**: Analiza los datos climáticos de `datos_clima.json` 
 y devuelve una lista de alertas generada por IA bajo categorías (Específica) en un archivo JSON `alertas_generadas.json`.
+* **/datos/api/alertas/sismos**: API que scrapea el CSN (Centro Sismológico Nacional) 
+    y devuelve un archivo JSON `datos_sismos.json` bajo una lista de coincidencias geográficas.
 """
 
 # --- Configuración ---
