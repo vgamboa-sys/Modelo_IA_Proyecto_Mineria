@@ -77,7 +77,7 @@ function SismosWidget() {
     <div className="mt-8">
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
         <SignalIcon className="h-6 w-6 text-blue-600 mr-2" />
-        Sismos Recientes - Escala Richter (CSN)
+        Sismos Recientes - Escala Richter
       </h2>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         {content}

@@ -17,12 +17,11 @@ function Header() {
           <div className="shrink-0 flex items-center">
               
             <a href="/" className="flex items-center">
-              <img src="/icon.png" alt="SafeMine Logo" className="h-10 w-9" />
+              <img src="/icon.png" alt="SafeMine Logo" className="h-12 w-11" />
               <span className="ml-2 text-xl font-sans text-white hidden sm:inline">SafeMine AI</span>
             </a>
           </div>
           
-
           {/* Links de Navegación (Desktop) */}
           <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
             <a
