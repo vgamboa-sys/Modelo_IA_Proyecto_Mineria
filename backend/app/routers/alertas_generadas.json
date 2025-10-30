@@ -1,0 +1,8 @@
+[
+    {
+        "categoria": "condiciones_normales",
+        "severidad": "Baja",
+        "titulo": "Condiciones Normales",
+        "descripcion": "Todos los parámetros están dentro de los rangos operativos seguros. Operaciones continúan con normalidad."
+    }
+]

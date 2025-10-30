@@ -1,23 +1,5 @@
 {
   "ciudad": "Mina Collahuasi",
-<<<<<<< HEAD
-  "temperatura_c": 6.16,
-  "humedad_pct": 18,
-  "presion_hpa": 1018,
-  "visibilidad_mts": 10000,
-  "nubes_pct": 0,
-  "viento_velocidad_ms": 9.48,
-  "viento_direccion_deg": 263,
-  "viento_rafaga_ms": 10.67,
-  "lluvia_1h_mm": 0.0,
-  "nieve_1h_mm": 0.0,
-  "polucion_pm10": 12.43,
-  "polucion_pm2_5": 5.17,
-  "polucion_co": 65.08,
-  "polucion_so2": 1.86,
-  "polucion_no2": 0.28,
-  "polucion_o3": 93.69,
-=======
   "temperatura_c": 3.52,
   "humedad_pct": 4,
   "presion_hpa": 1022,
@@ -34,6 +16,5 @@
   "polucion_so2": 1.39,
   "polucion_no2": 0.46,
   "polucion_o3": 85.56,
->>>>>>> b5d3f755f0e3c7beb5aa94c3b34db2f98d202650
   "polucion_nh3": 0.0
 }

@@ -29,60 +29,90 @@ def obtener_datos_gemini():
         with open("routers/datos_clima.json", "r", encoding="utf-8") as f:
             datos = json.load(f)
     except FileNotFoundError:
-        return JSONResponse(status_code=404, content={"error": "datos_clima.json no encontrado"})
+        print("No hay json encontrado")
+        return JSONResponse(status_code=404, content={"error": "datos_clima.json no encontrado"})        
     except json.JSONDecodeError as e:
+        print("JSON Inválido")
         return JSONResponse(status_code=500, content={"error": "JSON inválido", "detail": str(e)})
+        
+    
 
     # Generación Prompt
-    Categorias = [
-    "alerta_temperatura",
-    "alerta_visibilidad",
-    "alerta_viento",
-    "alerta_precipitacion",
-    "alerta_calidad_aire",
-    "otro"
-    ]
+
+    # 1. MAPEO PROTOCOLOS (Acá la IA categoriza basado en esta plantilla)
+    # -----------------------------------------------------------------
 
     Mapeo_Protocolo = {
-    "alerta_temperatura": {
-        "titulo": "temperatura",
-        "protocolo": "Reducir exposición al calor/frío, rotar turnos y asegurar hidratación/abrigo. Activar comunicación de riesgo a supervisión y suspender tareas críticas si riesgo alto.",
-        "fuente": "SERNAGEOMIN - Reglamento de Seguridad Minera / Guías de seguridad."
-    },
-    "alerta_visibilidad": {
-        "titulo": "visibilidad",
-        "protocolo": "Detener o restringir desplazamientos en superficie/zonas de alto tránsito; usar señales adicionales, iluminación y escolta para transporte; activar reportes de control.",
-        "fuente": "SERNAGEOMIN - Guías de planes de contingencia."
-    },
-    "alerta_viento": {
-        "titulo": "viento",
-        "protocolo": "Asegurar cargas, suspender operaciones de grúas/elevación si rachas altas, proteger áreas de trabajo expuestas y refugiar personal en zonas seguras.",
-        "fuente": "SERNAGEOMIN - Reglamento de Seguridad Minera."
-    },
-    "alerta_precipitacion": {
-        "titulo": "precipitacion",
-        "protocolo": "Reducir operaciones expuestas, controlar escorrentías, asegurar drenajes, suspender faenas críticas en caso de lluvia intensa o riesgo de aluviones.",
-        "fuente": "SERNAGEOMIN - Guías de seguridad y planes de contingencia."
-    },
-    "alerta_calidad_aire": {
-        "titulo": "calidad_aire",
-        "protocolo": "Proveer EPP respiratorio, limitar actividades con polvo, activar monitoreo continuo y trasladar personal vulnerable; mantener comunicación con salud ocupacional.",
-        "fuente": "SERNAGEOMIN / MINSAL - Protocolos de vigilancia."
-    },
-    "otro": {
-        "titulo": "otro",
-        "protocolo": "Evaluar situación específica, notificar a supervisión y Comités Paritarios; aplicar procedimientos de emergencia y medidas de protección según RIOHS y normativa.",
-        "fuente": "D.S. N°132 / POLÍTICA NACIONAL DE SEGURIDAD Y SALUD EN LA MINERÍA."
-    }    }
+        # --- RIESGOS COMBINADOS (Los más importantes) ---
+        "alerta_hielo_escarcha": {
+            "titulo": "Hielo en Caminos",
+            "protocolo": "Suspender tránsito, aplicar sal/material abrasivo, evaluar uso de cadenas."
+        },
+        "alerta_ventisca": {
+            "titulo": "Ventisca / Viento Blanco",
+            "protocolo": "Detener todo tránsito de vehículos y personal, buscar refugio, activar plan de emergencia."
+        },
+        "alerta_polvo_viento": {
+            "titulo": "Polvo por Viento Fuerte",
+            "protocolo": "Reducir velocidad, usar luces, suspender tránsito si visibilidad es crítica. Humectar caminos."
+        },
 
-    prompt = f"""Eres un sistema que clasifica condiciones meteorológicas y entrega recomendaciones. Recibirás datos de una mina y debes devolver **UN SOLO JSON** (sin texto adicional) con estas claves:
-    - categoria: una de {Categorias}
-    - severidad: "Alta", "Media" o "Baja"
-    - titulo: nombre simple (ej: "temperatura", "visibilidad", ...)
-    - descripcion: 50 palabras máximo con medidas y aclaraciones (más clara la instrucción, mejor)
-    Devuelve únicamente JSON válido.
+        # --- RIESGOS PRIMARIOS (Si no hay combinado) ---
+        "alerta_temperatura_extrema": {
+            "titulo": "Temperatura Extrema",
+            "protocolo": "Reducir exposición, rotar turnos, asegurar hidratación/abrigo."
+        },
+        "alerta_visibilidad_niebla": {
+            "titulo": "Niebla Densa",
+            "protocolo": "Detener o restringir desplazamientos, usar señales adicionales, escolta."
+        },
+        "alerta_viento_fuerte": {
+            "titulo": "Viento Fuerte",
+            "protocolo": "Asegurar cargas, suspender operaciones de grúas/izaje."
+        },
+        "alerta_precipitacion_intensa": {
+            "titulo": "Precipitación Intensa",
+            "protocolo": "Controlar escorrentías, asegurar drenajes, evaluar riesgo aluvional."
+        },
+        "alerta_calidad_aire": {
+            "titulo": "Calidad de Aire",
+            "protocolo": "Proveer EPP respiratorio, limitar actividades, monitoreo continuo."
+        },
 
-    Datos de la mina:
+        # --- REPORTE DE ESTATUS (Si no hay riesgos) ---
+        "condiciones_normales": {
+            "titulo": "Condiciones Normales",
+            "protocolo": "Operaciones continúan con normalidad."
+        }
+    }
+
+    # 2. CATEGORÍAS (Se generan desde el Mapeo)
+    # -----------------------------------------------------------------
+    
+    Categorias_Riesgo = list(Mapeo_Protocolo.keys()) # Obtener categorías del mapeo    
+    mapeo_json_string = json.dumps(Mapeo_Protocolo, indent=2, ensure_ascii=False) # Convertir mapeo a JSON para ingresarlo al prompt
+
+
+    # 3. GENERACIÓN DE PROMPT (Generación de alertas específicas)
+    # -----------------------------------------------------------------
+
+    prompt = f"""Eres un analista experto en riesgos de seguridad para minería a rajo abierto.
+    Tu trabajo es analizar los 'Datos de la mina' y devolver un **JSON que sea una LISTA (un array)**.
+    La lista debe contener un objeto por CADA riesgo 'Alto' o 'Medio' que detectes.
+
+    ---
+    REGLAS DE DECISIÓN CRÍTICAS:
+    1.  **Prioriza Combinaciones:** Si detectas un riesgo combinado (ej: 'alerta_hielo_escarcha' por Temp<0 y Lluvia>0), **NO** reportes los riesgos individuales ('alerta_temperatura_extrema' o 'alerta_precipitacion') que lo componen. El riesgo combinado los reemplaza.
+    2.  **Riesgos Múltiples:** Si hay múltiples riesgos no relacionados (ej: 'alerta_viento_fuerte' y 'alerta_calidad_aire'), incluye ambos en la lista.
+    3.  **SI NO HAY RIESGOS:** Si no encuentras NINGÚN riesgo 'Alto' o 'Medio', devuelve una lista con UN SOLO objeto: el de "condiciones_normales" y severidad "Baja".
+    ---
+    MAPEO DE PROTOCOLOS (Tu base de conocimiento. Úsala para 'titulo' y 'protocolo'):
+    {mapeo_json_string}
+    ---
+    LISTA DE CATEGORÍAS VÁLIDAS (Elige de esta lista):
+    {Categorias_Riesgo}
+    ---
+    DATOS DE LA MINA (Para analizar):
     Ciudad: {datos['ciudad']}
     Temperatura (°C): {datos['temperatura_c']}
     Humedad (%): {datos['humedad_pct']}
@@ -99,18 +129,24 @@ def obtener_datos_gemini():
     NO2: {datos['polucion_no2']}
     O3: {datos['polucion_o3']}
     NH3: {datos['polucion_nh3']}
+    ---
+    FORMATO DE SALIDA (Devuelve únicamente la lista JSON):
 
-    Reglas:
-    - Si ninguna categoría aplica, usa "otro".
-    - Severidad: Alta (riesgo inminente), Media (riesgo relevante), Baja (riesgo bajo).
-    - Asegúrate de que el JSON sea parseable (ejemplo: {{"categoria":"alerta_viento","severidad":"Alta",...}}).
+    -   **Si hay riesgos (Ejemplo):**
+        `[ {{"categoria": "alerta_viento_fuerte", "severidad": "Alta", "titulo": "Viento Fuerte", "descripcion": "Riesgo por ráfagas de 25 m/s. Suspender operaciones de grúas."}}, {{"categoria": "alerta_calidad_aire", "severidad": "Media", "titulo": "Calidad de Aire", "descripcion": "Niveles PM2.5 en 40 ug/m3. Limitar actividades con polvo."}} ]`
+
+    -   **Si NO hay riesgos (Ejemplo):**
+        `[ {{"categoria": "condiciones_normales", "severidad": "Baja", "titulo": "Condiciones Normales", "descripcion": "Todos los parámetros están dentro de los rangos operativos seguros. Operaciones continúan con normalidad."}} ]`
     """
-    # print(f"polucion o3: {datos['polucion_o3']}") --Debug pasa datos del json al prompt OK  
+    # print (prompt) Para ver en consola si se cargó el prompt correctamente
+
+    # 4. Implementar Genai (Google)
+    # -----------------------------------------------------------------
 
     # Crear config genai
     config_personalizada = types.GenerateContentConfig(
         temperature=0.0,
-        max_output_tokens=8192 # Potencia de 2, ojo con este parametro que esta ligado a los tokens del prompt + pensamiento ia + respuesta ia (Se debe calcular limite tokens capa gratuita y modelo)
+        max_output_tokens=8192 # Potencia de 2, ojo con este parámetro que esta ligado a los tokens del prompt + pensamiento ia + respuesta ia (Se debe calcular limite tokens capa gratuita y modelo)
     )
 
     # Obtener respuesta de la API
@@ -129,10 +165,32 @@ def obtener_datos_gemini():
         if not texto_genai:
             raise ValueError("El modelo devolvió una respuesta vacía o no válida.")
         
-        # Debug para ver si recibe respuesta
-        print("Respuesta cruda del modelo:\n", texto_genai)        
+        # print (texto_genai)
+
+        texto_limpio = texto_genai
+        if texto_limpio.startswith("```json"):
+            texto_limpio = texto_limpio[7:]  # Elimina ```json
+        if texto_limpio.endswith("```"):
+            texto_limpio = texto_limpio[:-3] # Elimina ```
         
-        return {"alerta_generada": texto_genai}  
+        texto_limpio = texto_limpio.strip()
+
+        try:
+            lista_de_alertas = json.loads(texto_limpio)
+        except json.JSONDecodeError:
+            print("Error: Gemini no devolvió una lista JSON válida.")
+            raise HTTPException(status_code=500, detail="Respuesta no válida de la IA.")
+
+        ruta_salida = "routers/alertas_generadas.json"
+        try:
+            with open(ruta_salida, "w", encoding="utf-8") as f:
+                json.dump(lista_de_alertas, f, ensure_ascii=False, indent=4)
+            print(f"Respuesta guardada exitosamente en {ruta_salida}")
+        except IOError as e:
+            # Si falla al guardar, solo imprime el error pero no detengas la API
+            print(f"ADVERTENCIA: No se pudo guardar el archivo JSON: {e}")
+
+        return lista_de_alertas
         
     except Exception as e:
         print("Error al llamar a Gemini:", e)
