@@ -180,17 +180,24 @@ def obtener_datos_gemini():
         except json.JSONDecodeError:
             print("Error: Gemini no devolvió una lista JSON válida.")
             raise HTTPException(status_code=500, detail="Respuesta no válida de la IA.")
+        
+        # Generar Datetime de la alerta
+        fecha_generacion = datetime.datetime.now().isoformat()
+        reporte_final_con_fecha = {
+            "fecha_generacion": fecha_generacion,
+            "alertas": lista_de_alertas  # Anidamos la lista original aquí
+        }
 
         ruta_salida = "routers/alertas_generadas.json"
         try:
             with open(ruta_salida, "w", encoding="utf-8") as f:
-                json.dump(lista_de_alertas, f, ensure_ascii=False, indent=4)
+                json.dump(reporte_final_con_fecha, f, ensure_ascii=False, indent=4)
             print(f"Respuesta guardada exitosamente en {ruta_salida}")
         except IOError as e:
             # Si falla al guardar, solo imprime el error pero no detengas la API
             print(f"ADVERTENCIA: No se pudo guardar el archivo JSON: {e}")
 
-        return lista_de_alertas
+        return reporte_final_con_fecha
         
     except Exception as e:
         print("Error al llamar a Gemini:", e)
