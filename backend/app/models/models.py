@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, Float, Date, Text, ForeignKey, BigInteger
+from sqlalchemy import Column, String, Float, Date, ForeignKey, BigInteger
 from sqlalchemy.orm import relationship
 from database.db import Base
 
@@ -7,7 +7,7 @@ from database.db import Base
 class Ciudad(Base):
     __tablename__ = "ciudad"
     id = Column(BigInteger, primary_key=True, index=True)
-    nombre = Column(String, unique=False, index=True)
+    nombre = Column(String(255), unique=False, index=True)
 
     # Relación: Una ciudad puede tener múltiples minas
     minas = relationship("Mina", back_populates="ciudad")
@@ -16,8 +16,8 @@ class Ciudad(Base):
 class Mina(Base):
     __tablename__ = "mina"
     id = Column(BigInteger, primary_key=True, index=True)
-    nombre = Column(String, index=True)
-    direccion = Column(String, nullable=True)
+    nombre = Column(String(255), index=True)
+    direccion = Column(String(255), nullable=True)
     lat = Column(Float, nullable=True)
     lon = Column(Float, nullable=True)
 
@@ -34,7 +34,7 @@ class Mina(Base):
 class Sismos(Base):
     __tablename__ = "sismos"
     id = Column(BigInteger, primary_key=True, index=True)
-    lugar = Column(String, nullable=True)
+    lugar = Column(String(255), nullable=True)
     fecha = Column(Date, default=datetime.date.today)
     magnitud = Column(Float)
     profundidad = Column(Float)
@@ -82,10 +82,10 @@ class Alerta(Base):
     __tablename__ = "alerta"
     id = Column(BigInteger, primary_key=True, index=True)
     fecha = Column(Date, primary_key=True, default=datetime.date.today)
-    tipo_severidad = Column(Text, nullable=True)
-    titulo = Column(Text, nullable=True)
-    protocolo = Column(Text, nullable=True)
-    descripcion = Column(String, nullable=True)
+    tipo_severidad = Column(String(255), nullable=True)
+    titulo = Column(String(255), nullable=True)
+    protocolo = Column(String(255), nullable=True)
+    descripcion = Column(String(255), nullable=True)
 
     # Claves foráneas
     id_mina = Column(BigInteger, ForeignKey("mina.id"))
