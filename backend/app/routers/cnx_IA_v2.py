@@ -115,7 +115,7 @@ def obtener_datos_gemini():
     {Categorias_Riesgo}
     ---
     DATOS DE LA MINA (Para analizar):
-    Ciudad: {datos['ciudad']}
+    Lugar: {datos['lugar']}
     Temperatura (°C): {datos['temperatura_c']}
     Humedad (%): {datos['humedad_pct']}
     Visibilidad (mts): {datos['visibilidad_mts']}
