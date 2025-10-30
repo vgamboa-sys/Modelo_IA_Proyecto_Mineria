@@ -1,17 +1,16 @@
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import JSONResponse
 
 import os 
 import json 
 import datetime
-import textwrap
 from dotenv import load_dotenv
 from google import genai # SDK de Google
 from google.genai import types # Crear objeto de configuración
 
 router = APIRouter()
 
-@router.post("/data_to_gemini_test",summary="Envía datos a Gemini y obtiene respuesta LLM")
+@router.get("/data_to_gemini_test",summary="Envía datos json del clima a Gemini y obtiene respuesta LLM")
 def obtener_datos_gemini():
     # Cargar credenciales API
     load_dotenv()
@@ -106,19 +105,12 @@ def obtener_datos_gemini():
     - Severidad: Alta (riesgo inminente), Media (riesgo relevante), Baja (riesgo bajo).
     - Asegúrate de que el JSON sea parseable (ejemplo: {{"categoria":"alerta_viento","severidad":"Alta",...}}).
     """
-
-    # print(f"polucion o3: {datos['polucion_o3']}") --Debug pasa datos del json al prompt OK
-    
-
-    #################### 
-    ####################
-    ####################
-    ''''
+    # print(f"polucion o3: {datos['polucion_o3']}") --Debug pasa datos del json al prompt OK  
 
     # Crear config genai
     config_personalizada = types.GenerateContentConfig(
         temperature=0.0,
-        max_output_tokens=800
+        max_output_tokens=8192 # Potencia de 2, ojo con este parametro que esta ligado a los tokens del prompt + pensamiento ia + respuesta ia (Se debe calcular limite tokens capa gratuita y modelo)
     )
 
     # Obtener respuesta de la API
@@ -130,70 +122,22 @@ def obtener_datos_gemini():
         )
         
         # Obtener texto de la respuesta
-        texto_genai = respuesta.candidates[0].content.parts[0].text      
-        print("Respuesta text genai\n", texto_genai)
+        texto_genai = respuesta.text      
+        
+        # print("Respueste repr ", (repr(respuesta))) Para debugear y conocer parametros de tokens usados en la llamada
 
         if not texto_genai:
             raise ValueError("El modelo devolvió una respuesta vacía o no válida.")
         
         # Debug para ver si recibe respuesta
-        print("Respuesta cruda del modelo:\n", texto_genai)
-
+        print("Respuesta cruda del modelo:\n", texto_genai)        
         
-        # Praseo respuesta a JSON para alertas del frontend        
-        try:
-            parsed = json.loads(texto_genai)
-        except Exception:
-            # Si modelo devuelve ```json ... ``` u otros adornos, extraer bloque JSON
-            import re
-            m = re.search(r"\{.*\}", texto_genai, re.DOTALL)
-            if m:
-                parsed = json.loads(m.group(0))
-            else:
-                raise ValueError("No se pudo parsear la respuesta de Gemini como JSON: " + texto_genai[:300])
-
-        # Validar campos mínimos
-        categoria = parsed.get("categoria")
-        severidad = parsed.get("severidad")
-        titulo = parsed.get("titulo")
-        descripcion = parsed.get("descripcion")
-
-        if not categoria or categoria not in Categorias:
-            categoria = "otro"
-
-        if severidad not in ["Alta", "Media", "Baja"]:
-            severidad = "Media"  # fallback
-
-        if not titulo:
-            titulo = Mapeo_Protocolo[categoria]["titulo"]
-
-        # Fecha-hora ISO (UTC)
-        fecha_hora = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).isoformat()
-
-        # Protocolo de acción y fuente (según categoría)
-        protocolo_entry = Mapeo_Protocolo.get(categoria, Mapeo_Protocolo["otro"])
-        protocolo_accion = {
-            "instruccion_corta": protocolo_entry["protocolo"],
-            "fuente": protocolo_entry["fuente"],
-            # Revisar con equipo si se agrega URL igual
-        }
-
-        salida = {
-            "categoria": categoria,
-            "severidad": severidad,
-            "titulo": titulo,
-            "fecha_hora": fecha_hora,
-            "protocolo_accion": protocolo_accion,
-            "descripcion": descripcion
-        } 
-        
-        return PlainTextResponse(texto_genai, status_code=200)
-        #return JSONResponse(status_code=200, content=salida) 
+        return {"alerta_generada": texto_genai}  
         
     except Exception as e:
         print("Error al llamar a Gemini:", e)
         raise HTTPException(status_code=500, detail=f"Error al procesar con Gemini: {e}")
-    '''
+    
 
 
 
