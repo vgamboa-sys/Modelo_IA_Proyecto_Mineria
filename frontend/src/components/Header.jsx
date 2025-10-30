@@ -3,10 +3,9 @@ import { UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outlin
 import { ShieldCheckIcon } from '@heroicons/react/24/solid';
 
 function Header() {
-  // Estado para controlar el menú móvil
   const [isOpen, setIsOpen] = useState(false);
 
-  // Función para determinar si una ruta está activa
+  // Función para determinar si una ruta está activa (Falta ver si la pagina sera de una sola vista o no)
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const isActive = (route) => pathname === route;
 
@@ -15,7 +14,7 @@ function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo y Título */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
               
             <a href="/" className="flex items-center">
               <img src="/icon.png" alt="SafeMine Logo" className="h-10 w-9" />
@@ -36,7 +35,7 @@ function Header() {
             >
               Inicio
             </a>
-            <a
+            {/*<a
               href="/reporte"
               className={`text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                 isActive('/reporte')
@@ -45,19 +44,19 @@ function Header() {
               }`}
             >
               Reportes
-            </a>
+            </a>*/}
           </div>
 
           {/* Íconos de la derecha (Usuario + Menú Móvil) */}
           <div className="flex items-center">
             {/* Ícono de Usuario (Siempre visible) */}
-            <button
+            {/*<button
               type="button"
               className="p-1 rounded-full text-white hover:text-orange-400"
             >
               <span className="sr-only">Ver perfil</span>
               <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
-            </button>
+            </button>*/}
 
             {/* Botón de Menú Móvil (Solo en 'sm' y más pequeño) */}
             <div className="ml-2 sm:hidden">
@@ -96,7 +95,7 @@ function Header() {
           >
             Inicio
           </a>
-          <a
+          {/*<a
             href="/reporte"
             className={`text-white block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
               isActive('/reporte')
@@ -105,11 +104,12 @@ function Header() {
             }`}
           >
             Reportes
-          </a>
+          </a>*/}
         </div>
       </div>
     </nav>
   );
+  
 }
 
 export default Header;
