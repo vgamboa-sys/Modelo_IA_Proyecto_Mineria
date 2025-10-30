@@ -206,6 +206,13 @@ def obtener_datos_gemini():
             print("Error: Gemini no devolvió una lista JSON válida.")
             raise HTTPException(status_code=500, detail="Respuesta no válida de la IA.")
         
+        for alerta in lista_de_alertas:
+            categoria = alerta.get("categoria")
+            # Busca la info (titulo y protocolo) en mapeo local
+            info_protocolo = Mapeo_Protocolo.get(categoria, {})
+            # Agrega el protocolo a la alerta (con un fallback por si acaso e.e)
+            alerta["protocolo"] = info_protocolo.get("protocolo", "Protocolo no definido.")
+        
         # Generar Datetime de la alerta
         fecha_generacion = datetime.datetime.now().isoformat()
         reporte_final_con_fecha = {
