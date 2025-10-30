@@ -14,7 +14,7 @@ function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo y Título */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
               
             <a href="/" className="flex items-center">
               <img src="/icon.png" alt="SafeMine Logo" className="h-10 w-9" />
@@ -109,6 +109,7 @@ function Header() {
       </div>
     </nav>
   );
+  
 }
 
 export default Header;

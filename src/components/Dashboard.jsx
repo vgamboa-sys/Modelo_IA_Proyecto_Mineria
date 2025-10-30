@@ -67,38 +67,45 @@ const alertData = [
 const severityConfig = {
   Alta: { 
     icon: ExclamationTriangleIcon, 
-    color: colorMap.Alta?.text || 'text-red-700' 
+    color: colorMap.Alta?.sevtext || 'text-red-700' 
   },
   Media: { 
     icon: ShieldExclamationIcon, 
-    color: colorMap.Media?.text || 'text-yellow-700'
+    color: colorMap.Media?.sevtext || 'text-yellow-700'
   },
   Baja: { 
     icon: ShieldCheckIcon, 
-    color: colorMap.Baja?.text || 'text-green-700'
+    color: colorMap.Baja?.sevtext || 'text-green-700'
   },
 };
 
 
 function Dashboard() {
-  const [selectedSeverity, setSelectedSeverity] = useState("Todas");
+  // Estado para el filtro de criticidad
+  const [selectedTableSev, setSelectedTableSev] = useState("Todas");
+  // Opciones de criticidad para el filtro
   const severityOptions = ["Todas", "Alta", "Media", "Baja"];
-  const [selectedAlert, setSelectedAlert] = useState(null);
+  // Estado para secciones colapsables
   const [openSection, setOpenSection] = useState("Alta");
+  const [selectedAlert, setSelectedAlert] = useState(null);
 
   const getBadgeClasses = (sev) => {
     const c = colorMap[sev] || { bg: "bg-gray-100", text: "text-gray-800" };
     return `${c.bg} ${c.text}`;
   };
 
-  const filteredAlerts = alertData.filter(
+  //Filtro para la tabla 
+  const filteredTableAlerts = alertData.filter(
     (alert) =>
-      selectedSeverity === "Todas" || alert.severity === selectedSeverity
+      selectedTableSev === "Todas" || 
+      alert.severity === selectedTableSev
   );
-
+  //Filtro para las tarjetas de alerta
   const severityOrder = ["Alta", "Media", "Baja"];
+
+  // Filtrar alertas según el filtro seleccionado
   const groupedAlerts = severityOrder.reduce((acc, sev) => {
-    acc[sev] = filteredAlerts.filter((a) => a.severity === sev);
+    acc[sev] = alertData.filter((a) => a.severity === sev);
     return acc;
   }, {});
 
@@ -107,23 +114,11 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100 relative">
       <Header />
-
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Alertas</h1>
         <p className="mt-1 text-gray-600">Alertas activas y su nivel de criticidad.</p>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3">
-            {/* Filtros */}
-            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-              <FilterButton
-                label="Criticidad"
-                options={severityOptions}
-                selected={selectedSeverity}
-                onSelect={setSelectedSeverity}
-              />
-            </div>
-
             {!hasSystemAlerts ? (
               <div className="mt-6">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center text-gray-500">
@@ -145,7 +140,7 @@ function Dashboard() {
                   return (
                     <div
                       key={sev}
-                     
+                    
                       className={`rounded-xl shadow-sm border border-gray-200 overflow-hidden 
                         ${colors.cardbackground || 'bg-white'}
                       `}
@@ -179,7 +174,6 @@ function Dashboard() {
                           isOpen ? 'block' : 'hidden'
                         }`}
                       >
-                        
                         <div className="p-4 border-t border-gray-200 max-h-96 overflow-auto">
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {items.map((alert, index) => (
@@ -192,7 +186,7 @@ function Dashboard() {
                                 onShowDetails={() => setSelectedAlert(alert)}
                               />
                             ))}
-</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -202,13 +196,25 @@ function Dashboard() {
             )}
           </div>
 
+          {/* Widget de Sismos */}  
           <div className="lg:col-span-1">
             <SismosWidget />
           </div>
+          
+          {/* Reporte de Alertas Tabla + Botón para filtro */}
+          <div className="lg:col-span-full">
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+              <div className="flex justify-start mb-2">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 md:mr-8 mr-12">Reporte de Alertas</h2>
+                {/* Filtro alineado con texto */}
+                <FilterButton
+                  label="Criticidad"
+                  options={severityOptions}
+                  selected={selectedTableSev}
+                  onSelect={setSelectedTableSev}
+                />
+              </div>
 
-          <div className="lg:col-span-4">
-             <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Reporte de Alertas</h2>
               <div className="overflow-x-auto">
                 <div className="inline-block min-w-full align-middle">
                   <div className="overflow-hidden border border-gray-200 rounded-lg">
@@ -221,14 +227,14 @@ function Dashboard() {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {alertData.length === 0 ? (
+                        {filteredTableAlerts.length === 0 ? (
                           <tr>
                             <td colSpan="3" className="px-4 py-4 text-sm text-center text-gray-500">
                               No hay alertas para mostrar
                             </td>
                           </tr>
                         ) : (
-                          alertData.map((alert, index) => (
+                          filteredTableAlerts.map((alert, index) => (
                             <tr key={`${alert.title}-${index}`} className="hover:bg-gray-50">
                               <td className="px-4 py-4 whitespace-nowrap text-sm">
                                 <span
@@ -236,7 +242,7 @@ function Dashboard() {
                                     alert.severity
                                   )}`}
                                 >
-                                  {alert.severityText}
+                                  {alert.severity}
                                 </span>
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-900">{alert.title}</td>
