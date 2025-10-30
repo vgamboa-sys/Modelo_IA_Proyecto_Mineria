@@ -17,7 +17,7 @@ Incluye los siguientes endpoints:
 * **/data_to_gemini**: Analiza los datos climáticos de `datos_clima.json` 
     y devuelve una lista de alertas generada por IA (De manera General).
 * **/data_to_gemini_test**: Analiza los datos climáticos de `datos_clima.json` 
-y devuelve una lista de alertas generada por IA bajo categorías (Especifica) en un archivo JSON `alertas_generadas.json`.
+y devuelve una lista de alertas generada por IA bajo categorías (Específica) en un archivo JSON `alertas_generadas.json`.
 """
 
 # --- Configuración ---
