@@ -1,0 +1,51 @@
+{
+  "fuente": "https://www.sismologia.cl/",
+  "keywords": [
+    "collahuasi",
+    "pica",
+    "camiña",
+    "ollague",
+    "ollagüe",
+    "socaire",
+    "calama"
+  ],
+  "total": 6,
+  "sismos": [
+    {
+      "fecha": "2025-10-30 07:28:30",
+      "lugar": "36 km al NE de Pica",
+      "magnitud": 2.8,
+      "profundidad_km": 91.0
+    },
+    {
+      "fecha": "2025-10-30 04:59:55",
+      "lugar": "18 km al NE de Pica",
+      "magnitud": 2.5,
+      "profundidad_km": 83.0
+    },
+    {
+      "fecha": "2025-10-30 04:54:46",
+      "lugar": "30 km al NE de Calama",
+      "magnitud": 2.5,
+      "profundidad_km": 102.0
+    },
+    {
+      "fecha": "2025-10-30 04:09:13",
+      "lugar": "73 km al S de Socaire",
+      "magnitud": 3.2,
+      "profundidad_km": 174.0
+    },
+    {
+      "fecha": "2025-10-30 02:27:33",
+      "lugar": "36 km al E de Pica",
+      "magnitud": 2.8,
+      "profundidad_km": 114.0
+    },
+    {
+      "fecha": "2025-10-30 02:19:52",
+      "lugar": "27 km al SO de Mina Collahuasi",
+      "magnitud": 2.6,
+      "profundidad_km": 100.0
+    }
+  ]
+}
