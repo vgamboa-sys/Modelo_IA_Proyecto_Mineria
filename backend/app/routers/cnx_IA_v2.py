@@ -7,6 +7,8 @@ import datetime
 from dotenv import load_dotenv
 from google import genai # SDK de Google
 from google.genai import types # Crear objeto de configuración
+import time # Para la pausa de reintento
+from google.api_core import exceptions as google_exceptions # Para capturar el error 503
 
 router = APIRouter()
 
@@ -151,11 +153,34 @@ def obtener_datos_gemini():
 
     # Obtener respuesta de la API
     try:
-        respuesta = cliente_ppj.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=config_personalizada
-        )
+
+        # CONFIGURACIÓN DE REINTENTOS 
+        num_intentos = 3
+        delay_entre_intentos_seg = 120 # 120 segundos = 2 minutos
+
+        for attempt in range(num_intentos):
+            try:
+                print(f"Intento de llamada a Gemini {attempt + 1}/{num_intentos}...")
+
+                respuesta = cliente_ppj.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt,
+                    config=config_personalizada
+                )
+
+                print("Llamada exitosa.", flush=True)
+                break
+
+            except google_exceptions.ServiceUnavailable as e: # Captura Específica del 503
+                print(f"Error 503 (Intento {attempt + 1}): Servidor sobrecargado.", flush=True)
+                
+                if attempt < num_intentos - 1: # Si no es el último intento
+                    print(f"Reintentando en {delay_entre_intentos_seg} segundos...", flush=True)
+                    time.sleep(delay_entre_intentos_seg)
+                else:
+                    # Es el último intento y también falló, relanzamos la excepción
+                    print("Error: Todos los reintentos fallaron.", flush=True)
+                    raise e # Esto será capturado por el 'except Exception as e' de abajo
         
         # Obtener texto de la respuesta
         texto_genai = respuesta.text      

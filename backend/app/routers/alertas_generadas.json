@@ -1,8 +1,11 @@
-[
-    {
-        "categoria": "condiciones_normales",
-        "severidad": "Baja",
-        "titulo": "Condiciones Normales",
-        "descripcion": "Todos los parámetros están dentro de los rangos operativos seguros. Operaciones continúan con normalidad."
-    }
-]
+{
+    "fecha_generacion": "2025-10-30T12:26:17.760277",
+    "alertas": [
+        {
+            "categoria": "condiciones_normales",
+            "severidad": "Baja",
+            "titulo": "Condiciones Normales",
+            "descripcion": "Todos los parámetros están dentro de los rangos operativos seguros. Operaciones continúan con normalidad."
+        }
+    ]
+}
