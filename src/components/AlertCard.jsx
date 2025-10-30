@@ -13,7 +13,7 @@ export const colorMap = {
   },
   Media: {
     cardheader: 'bg-yellow-400',
-    cardbackground: 'bg-yellow-300',
+    cardbackground: 'bg-yellow-200',
     alertnumber: 'bg-yellow-200',
     bg: 'bg-yellow-100', 
     border: 'border-2 border-yellow-400',
@@ -23,7 +23,7 @@ export const colorMap = {
   },
   Baja: {
     cardheader: 'bg-green-400',
-    cardbackground: 'bg-green-300',
+    cardbackground: 'bg-green-200',
     alertnumber: 'bg-green-200',
     bg: 'bg-green-100',
     border: 'border-2 border-green-400',
