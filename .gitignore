@@ -1,12 +1,14 @@
 # Entornos virtuales
 venv/
-.env/
+env/
+.env
 .env.*
 
 # Archivos de Python compilados
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 
 # Archivos de Jupyter Notebook checkpoints
 .ipynb_checkpoints
@@ -27,6 +29,25 @@ temp/
 .vscode/
 .idea/
 *.iml
+
+# Base de datos SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Archivos de configuración sensibles
+backend/app/.env
+*.pem
+*.key
+
+# Archivos JSON generados (si no quieres versionar los datos)
+backend/app/routers/alertas_generadas.json
+backend/app/routers/datos_clima.json
+backend/app/routers/datos_sismos.json
 
 
 

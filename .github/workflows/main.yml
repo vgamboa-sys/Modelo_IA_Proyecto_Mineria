@@ -1,0 +1,105 @@
+name: safemine-backend
+on:
+  push:
+    branches:
+      - production
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar y obtener codigo
+        uses: actions/checkout@v4
+
+      - name: Crear carpeta en AWSEC2
+        uses: appleboy/ssh-actions@v1
+        with:
+          host: ${{ secrets.IP_SERVER }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            mkdir -p /home/ubuntu/safemine
+
+      - name: Sincronizar proyecto con el servidor
+        uses: burnett01/rsync-deployments@7.0.2
+        with:
+          switches: "-avz --delete"
+          path: "./"
+          remote_host: ${{ secrets.IP_SERVER }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_path: "/home/ubuntu/safemine"
+          remote_key: ${{ secrets.KEY }}
+          remote_port: ${{ secrets.PORT }}
+
+      - name: Configurar entorno Python y dependencias
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.IP_SERVER }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/ubuntu/safemine
+
+            # Crear entorno virtual si no existe
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+
+            # Activar entorno virtual e instalar dependencias
+            source venv/bin/activate
+            pip install --upgrade pip
+            pip install -r backend/app/requirements.txt
+
+            # Copiar archivo .env si existe (para variables de entorno)
+            # Asegúrate de tener tu archivo .env configurado en el servidor
+
+      - name: Configurar servicio systemd
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.IP_SERVER }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            # Crear archivo de servicio systemd
+            sudo tee /etc/systemd/system/safemine.service > /dev/null <<EOF
+            [Unit]
+            Description=SafeMine FastAPI Application
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=ubuntu
+            WorkingDirectory=/home/ubuntu/safemine/backend/app
+            Environment="PATH=/home/ubuntu/safemine/venv/bin"
+            ExecStart=/home/ubuntu/safemine/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+            Restart=always
+            RestartSec=10
+
+            [Install]
+            WantedBy=multi-user.target
+            EOF
+
+            # Recargar systemd y reiniciar servicio
+            sudo systemctl daemon-reload
+            sudo systemctl enable safemine.service
+            sudo systemctl restart safemine.service
+
+      - name: Verificar estado del servicio
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.IP_SERVER }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            # Esperar unos segundos para que el servicio inicie
+            sleep 5
+
+            # Verificar estado del servicio
+            sudo systemctl status safemine.service --no-pager
+
+            # Mostrar últimas líneas del log
+            echo "=== Últimas líneas del log ==="
+            sudo journalctl -u safemine.service -n 20 --no-pager
