@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Crear carpeta en AWSEC2
-        uses: appleboy/ssh-actions@v1
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.IP_SERVER }}
           username: ${{ secrets.USERNAME }}
