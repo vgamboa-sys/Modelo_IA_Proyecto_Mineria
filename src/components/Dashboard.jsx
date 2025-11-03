@@ -35,6 +35,8 @@ const severityConfig = {
   },
 };
 
+// Intervalo de refresco en milisegundos (ej. 60000 ms = 1 minuto)
+const REFRESH_INTERVAL_MS = 60000;
 
 function Dashboard() {
   // Estado para el filtro de criticidad
