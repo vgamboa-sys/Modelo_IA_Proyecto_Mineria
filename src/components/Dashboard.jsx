@@ -10,15 +10,13 @@ import {
   ShieldExclamationIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/solid";
-//instalar para la paginación
 import {
   useReactTable,
   getCoreRowModel,
-  getPaginationRowModel, //Necesario para la paginacion
-  flexRender, // <--- ¡CORRECCIÓN 1: Importar flexRender!
+  getPaginationRowModel, 
+  flexRender, 
 } from '@tanstack/react-table';
 
-// ... (severityConfig permanece igual) ...
 
 const severityConfig = {
   Alta: { 
@@ -124,7 +122,7 @@ const toggleSection = (sev) => {
           protocolo: alert.protocolo,
         }));
         setFullAlertHistory(mappedFullHistory);
-        // console.log("Historial completo de alertas cargado:", mappedFullHistory); // Descomentar para debug
+        // console.log("Historial completo de alertas cargado:", mappedFullHistory); 
 
       } catch (e) {
         console.error("Error al obtener alertas:", e);
@@ -145,27 +143,38 @@ const toggleSection = (sev) => {
 
   // --- DEFINICIÓN DE COLUMNAS DE LA TABLA ---
   const columnas = useMemo(
-    () => [
-      {
-        header: "Tipo de Criticidad",
-        accessorKey: "severity",
-        cell: ({ row }) => (
-          <span
-            className={`inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium ${getBadgeClasses(
-              row.original.severity
-            )}`}
-          >
-            {row.original.severity}
-          </span>
-        ),
-      },
-      { header: "Descripción", accessorKey: "title" },
-      { header: "Fecha y Hora", accessorKey: "timestamp" },
-    ],
-    []
-  );
+  () => [
+    {
+      header: "Tipo de Criticidad",
+      accessorKey: "severity",
+      cell: ({ row }) => (
+        <span
+          className={`inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium ${getBadgeClasses(
+            row.original.severity
+          )}`}
+        >
+          {row.original.severity}
+        </span>
+      ),
+    },
+    { header: "Descripción", accessorKey: "title" },
+    { header: "Fecha y Hora", accessorKey: "timestamp" },
+    {
+      header: "Acciones",
+      id: "acciones",
+      cell: ({ row }) => (
+        <button
+          onClick={() => setSelectedAlert(row.original)}
+          className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+        >
+          Ver Detalles
+        </button>
+      ),
+    },
+  ],
+  []
+);
 
-  // --- HOOK DE REACT-TABLE  ---
   const tabla = useReactTable({
     data: dataFiltradaTabla, 
     columns: columnas,
@@ -252,7 +261,6 @@ const toggleSection = (sev) => {
                   const items = groupedRecentAlerts[sev] || []; 
                   if (items.length === 0) return null;
 
-                  // 🟢 USO CORRECTO DEL SET: Verifica si esta severidad está en el Set
                   const isOpen = openSections.has(sev); 
                   const IconComponent =
                     severityConfig[sev]?.icon || ExclamationTriangleIcon;
@@ -367,7 +375,7 @@ const toggleSection = (sev) => {
                             <th key={header.id} scope="col" className="px-4 py-3">
                               {header.isPlaceholder
                                 ? null
-                                : flexRender( // <--- ¡Uso correcto de flexRender!
+                                : flexRender( 
                                     header.column.columnDef.header,
                                     header.getContext()
                                   )}
@@ -385,7 +393,7 @@ const toggleSection = (sev) => {
                               colSpan="1"
                               className="px-4 py-4 text-sm text-center text-gray-500"
                             >
-                              {flexRender( // <--- ¡Uso correcto de flexRender!
+                              {flexRender( 
                                 cell.column.columnDef.cell,
                                 cell.getContext()
                               )}
