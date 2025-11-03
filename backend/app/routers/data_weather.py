@@ -45,7 +45,11 @@ async def get_datos_fuente_para_ia():
 
         # --- Formatear el JSON de Salida ---
         datos_consolidados = DatosClimaticosMina(
+<<<<<<< HEAD
             ciudad=MINA_CIUDAD,
+=======
+            lugar=MINA_CIUDAD,
+>>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
             temperatura_c=main.get('temp', 0),
             humedad_pct=main.get('humidity', 0),
             presion_hpa=main.get('pressure', 0),

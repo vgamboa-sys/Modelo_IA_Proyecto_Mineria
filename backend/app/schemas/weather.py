@@ -5,7 +5,7 @@ from typing import Optional
 
 class DatosClimaticosMina(BaseModel):
     """Datos crudos del clima y polución obtenidos de OWM."""
-    ciudad: str
+    lugar: str
     temperatura_c: float
     humedad_pct: int
     presion_hpa: int
