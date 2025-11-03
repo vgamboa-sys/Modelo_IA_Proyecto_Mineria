@@ -10,12 +10,6 @@ from google.genai import types # Crear objeto de configuración
 import time # Para la pausa de reintento
 from google.api_core import exceptions as google_exceptions # Para capturar el error 503
 
-<<<<<<< HEAD
-router = APIRouter()
-
-@router.get("/data_to_gemini_test",summary="Envía datos json del clima a Gemini y obtiene respuesta LLM")
-def obtener_datos_gemini():
-=======
 ###### Imports de DB
 from sqlalchemy.orm import Session
 from models import models
@@ -25,7 +19,6 @@ router = APIRouter()
 @router.post("/data_to_gemini_test",summary="Envía datos json del clima a Gemini y obtiene respuesta LLM")
 def obtener_datos_gemini(db: Session = Depends(get_db)):
 
->>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
     # Cargar credenciales API
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
@@ -36,11 +29,7 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
         print("Si existe la API Gemini")
 
     # Pasar API a cliente
-<<<<<<< HEAD
-    cliente_ppj = genai.Client(api_key=api_key)
-=======
     cliente_ppj = genai.Client(api_key=api_key)    
->>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
 
     try:
         # Cargar JSON
@@ -131,11 +120,7 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
     {Categorias_Riesgo}
     ---
     DATOS DE LA MINA (Para analizar):
-<<<<<<< HEAD
-    Ciudad: {datos['ciudad']}
-=======
     Lugar: {datos['lugar']}
->>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
     Temperatura (°C): {datos['temperatura_c']}
     Humedad (%): {datos['humedad_pct']}
     Visibilidad (mts): {datos['visibilidad_mts']}
@@ -226,23 +211,6 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
             print("Error: Gemini no devolvió una lista JSON válida.")
             raise HTTPException(status_code=500, detail="Respuesta no válida de la IA.")
         
-<<<<<<< HEAD
-        for alerta in lista_de_alertas:
-            categoria = alerta.get("categoria")
-            # Busca la info (titulo y protocolo) en mapeo local
-            info_protocolo = Mapeo_Protocolo.get(categoria, {})
-            # Agrega el protocolo a la alerta (con un fallback por si acaso e.e)
-            alerta["protocolo"] = info_protocolo.get("protocolo", "Protocolo no definido.")
-        
-        # Generar Datetime de la alerta
-        fecha_generacion = datetime.datetime.now().isoformat()
-        reporte_final_con_fecha = {
-            "fecha_generacion": fecha_generacion,
-            "alertas": lista_de_alertas  # Anidamos la lista original aquí
-        }
-
-        ruta_salida = "routers/alertas_generadas.json"
-=======
         alertas_db = [] # Iniciar lista de alertas para guardar
         id_mina = 1 # Hardcodeado
         
@@ -281,7 +249,6 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
         
         ruta_salida = "routers/alertas_generadas.json"
 
->>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
         try:
             with open(ruta_salida, "w", encoding="utf-8") as f:
                 json.dump(reporte_final_con_fecha, f, ensure_ascii=False, indent=4)
@@ -291,8 +258,6 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
             print(f"ADVERTENCIA: No se pudo guardar el archivo JSON: {e}")
 
         return reporte_final_con_fecha
-<<<<<<< HEAD
-=======
         '''
     
         return JSONResponse(
@@ -303,7 +268,6 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
                 "num_alertas": len(alertas_db)
             }
         )
->>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
         
     except Exception as e:
         print("Error al llamar a Gemini:", e)
