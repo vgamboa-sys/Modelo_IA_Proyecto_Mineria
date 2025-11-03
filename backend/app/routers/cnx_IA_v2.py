@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
-
-import os 
-import json 
-import datetime
-=======
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from database.db import get_db
 
 import os 
 import json 
->>>>>>> 709d9eb75edc26dacf077f751f15b7e9f4e3a8ed
 from dotenv import load_dotenv
 from google import genai # SDK de Google
 from google.genai import types # Crear objeto de configuración
