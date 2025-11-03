@@ -1,6 +1,7 @@
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2
+from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2, alertas_historial_3H, alertas_historial_completo
+from fastapi.middleware.cors import CORSMiddleware
 
 # --- Base de Datos ---
 from database.db import engine
@@ -29,12 +30,29 @@ app = FastAPI(
     description=v1_description,
     redoc_url=None)
     
+origins = [
+    "http://localhost:5173",                         # dev local
+    "http://127.0.0.1:5173",                         # dev local
+    "http://44.206.67.3:8000",                       # dev prod
+    "https://modelo-ia-proyecto-mineria.pages.dev",  # tu front
+
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # o ["*"] solo para pruebas
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Agregar routers ---
 app.include_router(data_weather.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(cnx_IA.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(cnx_IA_v2.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(data_sismos.router, prefix="/datos", tags=["Datos Sismos"])
+app.include_router(alertas_historial_completo.router, prefix="/datos", tags=["Alertas"])
+app.include_router(alertas_historial_3H.router, prefix="/datos", tags=["Alertas"])
 
 # --- Página Principal ---
 @app.get("/",tags=["Ruta /"])
