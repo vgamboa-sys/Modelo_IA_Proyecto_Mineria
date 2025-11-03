@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, String, Float, Date, ForeignKey, BigInteger
+from sqlalchemy import Column, String, Float, Date, ForeignKey, BigInteger, DateTime
 from sqlalchemy.orm import relationship
 from database.db import Base
 
@@ -81,7 +81,7 @@ class Clima(Base):
 class Alerta(Base):
     __tablename__ = "alerta"
     id = Column(BigInteger, primary_key=True, index=True)
-    fecha = Column(Date, primary_key=True, default=datetime.date.today)
+    fecha = Column(DateTime, default=datetime.datetime.now, index = True)
     tipo_severidad = Column(String(255), nullable=True)
     titulo = Column(String(255), nullable=True)
     protocolo = Column(String(255), nullable=True)
