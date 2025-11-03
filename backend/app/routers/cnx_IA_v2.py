@@ -66,7 +66,7 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
 
         # --- RIESGOS PRIMARIOS (Si no hay combinado) ---
         "alerta_temperatura_extrema": {
-            "titulo": "Temperatura Extrema",
+            "titulo": "Temperatura extrema",
             "protocolo": "Reducir exposición, rotar turnos, asegurar hidratación/abrigo."
         },
         "alerta_visibilidad_niebla": {
