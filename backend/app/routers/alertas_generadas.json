@@ -1,0 +1,19 @@
+{
+    "fecha_generacion": "2025-10-30T15:20:11.103271",
+    "alertas": [
+        {
+            "categoria": "alerta_temperatura_extrema",
+            "severidad": "Alta",
+            "titulo": "Temperatura Extrema",
+            "descripcion": "Temperatura de 35°C. Riesgo de golpe de calor y deshidratación. Se debe reducir la exposición, rotar turnos y asegurar la hidratación/abrigo del personal.",
+            "protocolo": "Reducir exposición, rotar turnos, asegurar hidratación/abrigo."
+        },
+        {
+            "categoria": "alerta_polvo_viento",
+            "severidad": "Media",
+            "titulo": "Polvo por Viento Fuerte",
+            "descripcion": "Viento sostenido de 16 m/s y humedad del 4% están generando polvo, reduciendo la visibilidad a 500 metros. Se recomienda reducir velocidad, usar luces y humectar caminos.",
+            "protocolo": "Reducir velocidad, usar luces, suspender tránsito si visibilidad es crítica. Humectar caminos."
+        }
+    ]
+}

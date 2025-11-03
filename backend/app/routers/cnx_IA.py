@@ -25,7 +25,7 @@ def obtener_datos_gemini():
 
     try:
         # Cargar JSON
-        with open("backend\\app\\routers\\datos_clima.json", "r", encoding="utf-8") as f:
+        with open("routers/datos_clima.json", "r", encoding="utf-8") as f:
             datos = json.load(f)
     except FileNotFoundError:
         return JSONResponse(status_code=404, content={"error": "datos_clima.json no encontrado"})

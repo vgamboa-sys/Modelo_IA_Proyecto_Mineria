@@ -3,6 +3,7 @@ from schemas.weather import DatosClimaticosMina
 import requests
 import os
 from dotenv import load_dotenv
+import json
 
 router = APIRouter()
 
@@ -13,6 +14,9 @@ API_KEY = os.getenv("OPENWEATHER_API_KEY")
 MINA_LAT = -20.9914
 MINA_LON = -68.6386
 MINA_CIUDAD = "Mina Collahuasi"
+
+#Ruta donde irán los JSON
+RUTA_JSON_SALIDA = os.path.join(os.path.dirname(__file__), "datos_clima.json")
 
 @router.get("/api/alertas/actual", response_model=DatosClimaticosMina)
 async def get_datos_fuente_para_ia():
@@ -41,7 +45,7 @@ async def get_datos_fuente_para_ia():
 
         # --- Formatear el JSON de Salida ---
         datos_consolidados = DatosClimaticosMina(
-            ciudad=data_clima.get('name', MINA_CIUDAD),
+            lugar=MINA_CIUDAD,
             temperatura_c=main.get('temp', 0),
             humedad_pct=main.get('humidity', 0),
             presion_hpa=main.get('pressure', 0),
@@ -65,6 +69,18 @@ async def get_datos_fuente_para_ia():
             polucion_o3=componentes.get('o3', 0),
             polucion_nh3=componentes.get('nh3', 0)
         )
+        
+        try:
+            # Convierte el objeto Pydantic a un diccionario
+            datos_dict = datos_consolidados.model_dump() 
+            with open(RUTA_JSON_SALIDA, "w", encoding="utf-8") as f:
+                # Escribe el diccionario en el archivo JSON con formato legible
+                json.dump(datos_dict, f, ensure_ascii=False, indent=2) 
+            print(f"Datos guardados exitosamente en {RUTA_JSON_SALIDA}")
+        except IOError as e:
+            print(f"Error al guardar el archivo JSON: {e}")
+            # Decide si quieres que esto sea un error crítico o solo una advertencia
+            # raise HTTPException(status_code=500, detail=f"Error al guardar datos localmente: {e}")
         
         return datos_consolidados
 
