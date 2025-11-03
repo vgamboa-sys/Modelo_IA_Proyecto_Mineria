@@ -113,7 +113,7 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
     2.  **Riesgos Múltiples:** Si hay múltiples riesgos no relacionados (ej: 'alerta_viento_fuerte' y 'alerta_calidad_aire'), incluye ambos en la lista.
     3.  **SI NO HAY RIESGOS:** Si no encuentras NINGÚN riesgo 'Alto' o 'Medio', devuelve una lista con UN SOLO objeto: el de "condiciones_normales" y severidad "Baja".
     ---
-    MAPEO DE PROTOCOLOS (Tu base de conocimiento. Úsala para 'titulo' y 'protocolo'):
+    MAPEO DE PROTOCOLOS (Tu base de conocimiento. Úsala SOLO para 'titulo'):
     {mapeo_json_string}
     ---
     LISTA DE CATEGORÍAS VÁLIDAS (Elige de esta lista):
@@ -137,13 +137,25 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
     O3: {datos['polucion_o3']}
     NH3: {datos['polucion_nh3']}
     ---
-    FORMATO DE SALIDA (Devuelve únicamente la lista JSON):
+    FORMATO DE SALIDA (REGLAS ESTRICTAS):
+    Devuelve únicamente la lista JSON.
+    
+    1.  **campo 'categoria'**: Elige de la 'LISTA DE CATEGORÍAS VÁLIDAS'.
+    2.  **campo 'severidad'**: 'Alta', 'Media' o 'Baja'.
+    3.  **campo 'titulo'**: Cópialo EXACTAMENTE desde el 'MAPEO DE PROTOCOLOS'.
+    4.  **campo 'descripcion'**: **REGLA MÁS IMPORTANTE:**
+        * Debe ser un resumen en lenguaje natural (máximo 50 palabras).
+        * Debe explicar **POR QUÉ** se genera la alerta, mencionando los valores de los 'Datos de la mina' que la causan.
+        * **NO INCLUYAS EL TEXTO DEL PROTOCOLO AQUÍ.**
+
+    ---
+    EJEMPLOS DE SALIDA (Solo para referencia de formato):
 
     -   **Si hay riesgos (Ejemplo):**
-        `[ {{"categoria": "alerta_viento_fuerte", "severidad": "Alta", "titulo": "Viento Fuerte", "descripcion": "Riesgo por ráfagas de 25 m/s. Suspender operaciones de grúas."}}, {{"categoria": "alerta_calidad_aire", "severidad": "Media", "titulo": "Calidad de Aire", "descripcion": "Niveles PM2.5 en 40 ug/m3. Limitar actividades con polvo."}} ]`
+        `[ {{"categoria": "alerta_viento_fuerte", "severidad": "Alta", "titulo": "Viento Fuerte", "descripcion": "Riesgo por ráfagas de 25 m/s y vientos sostenidos de 15 m/s."}}, {{"categoria": "alerta_calidad_aire", "severidad": "Media", "titulo": "Calidad de Aire", "descripcion": "Niveles de PM2.5 superan los 40 ug/m3."}} ]`
 
     -   **Si NO hay riesgos (Ejemplo):**
-        `[ {{"categoria": "condiciones_normales", "severidad": "Baja", "titulo": "Condiciones Normales", "descripcion": "Todos los parámetros están dentro de los rangos operativos seguros. Operaciones continúan con normalidad."}} ]`
+        `[ {{"categoria": "condiciones_normales", "severidad": "Baja", "titulo": "Condiciones Normales", "descripcion": "Todos los parámetros operativos están dentro de rangos seguros."}} ]`
     """
     # print (prompt) Para ver en consola si se cargó el prompt correctamente
 
