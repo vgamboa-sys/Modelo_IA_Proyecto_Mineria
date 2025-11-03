@@ -12,28 +12,28 @@
   "total": 4,
   "sismos": [
     {
+      "fecha": "2025-11-03 16:16:05",
+      "lugar": "69 km al NE de Calama",
+      "magnitud": 2.7,
+      "profundidad_km": 123.0
+    },
+    {
+      "fecha": "2025-11-03 15:58:17",
+      "lugar": "50 km al SE de Socaire",
+      "magnitud": 3.0,
+      "profundidad_km": 254.0
+    },
+    {
+      "fecha": "2025-11-03 12:49:27",
+      "lugar": "41 km al N de Pica",
+      "magnitud": 2.8,
+      "profundidad_km": 95.0
+    },
+    {
       "fecha": "2025-11-03 08:07:33",
       "lugar": "40 km al SO de Mina Collahuasi",
       "magnitud": 2.5,
       "profundidad_km": 111.0
-    },
-    {
-      "fecha": "2025-11-03 06:41:35",
-      "lugar": "21 km al S de Mina Collahuasi",
-      "magnitud": 2.5,
-      "profundidad_km": 112.0
-    },
-    {
-      "fecha": "2025-11-03 03:58:26",
-      "lugar": "74 km al E de Socaire",
-      "magnitud": 3.3,
-      "profundidad_km": 236.0
-    },
-    {
-      "fecha": "2025-11-03 01:38:46",
-      "lugar": "123 km al NE de Socaire",
-      "magnitud": 3.4,
-      "profundidad_km": 273.0
     }
   ]
 }

@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2, alertas_historial_3H, alertas_historial_completo
 from fastapi.middleware.cors import CORSMiddleware
 
+from scheduler import start as scheduler_start, stop as scheduler_stop
+
 # --- Base de Datos ---
 from database.db import engine
 from models import models  # Importa modelos de DB
@@ -54,6 +56,15 @@ app.include_router(data_sismos.router, prefix="/datos", tags=["Datos Sismos"])
 app.include_router(alertas_historial_completo.router, prefix="/datos", tags=["Alertas"])
 app.include_router(alertas_historial_3H.router, prefix="/datos", tags=["Alertas"])
 
+# --- Scheduler: enganchar al ciclo de vida de FastAPI ---
+@app.on_event("startup")
+def on_startup():
+    scheduler_start()
+
+@app.on_event("shutdown")
+def on_shutdown():
+    scheduler_stop()
+    
 # --- Página Principal ---
 @app.get("/",tags=["Ruta /"])
 def root():
