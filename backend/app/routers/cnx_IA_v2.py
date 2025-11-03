@@ -1,19 +1,24 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
+from database.db import get_db
 
 import os 
 import json 
-import datetime
 from dotenv import load_dotenv
 from google import genai # SDK de Google
 from google.genai import types # Crear objeto de configuración
 import time # Para la pausa de reintento
 from google.api_core import exceptions as google_exceptions # Para capturar el error 503
 
+###### Imports de DB
+from sqlalchemy.orm import Session
+from models import models
+
 router = APIRouter()
 
-@router.get("/data_to_gemini_test",summary="Envía datos json del clima a Gemini y obtiene respuesta LLM")
-def obtener_datos_gemini():
+@router.post("/data_to_gemini_test",summary="Envía datos json del clima a Gemini y obtiene respuesta LLM")
+def obtener_datos_gemini(db: Session = Depends(get_db)):
+
     # Cargar credenciales API
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
@@ -24,7 +29,7 @@ def obtener_datos_gemini():
         print("Si existe la API Gemini")
 
     # Pasar API a cliente
-    cliente_ppj = genai.Client(api_key=api_key)
+    cliente_ppj = genai.Client(api_key=api_key)    
 
     try:
         # Cargar JSON
@@ -206,21 +211,44 @@ def obtener_datos_gemini():
             print("Error: Gemini no devolvió una lista JSON válida.")
             raise HTTPException(status_code=500, detail="Respuesta no válida de la IA.")
         
+        alertas_db = [] # Iniciar lista de alertas para guardar
+        id_mina = 1 # Hardcodeado
+        
         for alerta in lista_de_alertas:
-            categoria = alerta.get("categoria")
-            # Busca la info (titulo y protocolo) en mapeo local
-            info_protocolo = Mapeo_Protocolo.get(categoria, {})
+            categoria = alerta.get("categoria")            
+            info_protocolo = Mapeo_Protocolo.get(categoria, {}) # Busca la info (titulo y protocolo) en mapeo local
             # Agrega el protocolo a la alerta (con un fallback por si acaso e.e)
             alerta["protocolo"] = info_protocolo.get("protocolo", "Protocolo no definido.")
         
-        # Generar Datetime de la alerta
-        fecha_generacion = datetime.datetime.now().isoformat()
-        reporte_final_con_fecha = {
-            "fecha_generacion": fecha_generacion,
-            "alertas": lista_de_alertas  # Anidamos la lista original aquí
-        }
+        # Generar objeto models.Alerta  
 
+        try: 
+            for alerta in lista_de_alertas:
+                db_alerta = models.Alerta(
+                    tipo_severidad=alerta.get("severidad"),
+                    titulo=alerta.get("titulo"),
+                    protocolo=alerta.get("protocolo"), 
+                    descripcion=alerta.get("descripcion"),
+                    id_mina=id_mina, # Id fijo
+                    id_clima=None, # Id opcional
+                    id_sismo=None # Id opcional                    
+                )
+                alertas_db.append(db_alerta)
+
+            if alertas_db:                
+                db.add_all(alertas_db)
+                db.commit()
+                print(f"¡ÉXITO! Se guardaron {len(alertas_db)} alertas en la base de datos (Mina ID: {id_mina}).")
+        except Exception as e:
+            db.rollback()
+            print(f"Error al guardar Alertas en la DB: {e}")
+            raise HTTPException(status_code=500, detail=f"Error al guardar en DB: {e}")
+
+        '''
+        # Código antiguo que guardaba JSON
+        
         ruta_salida = "routers/alertas_generadas.json"
+
         try:
             with open(ruta_salida, "w", encoding="utf-8") as f:
                 json.dump(reporte_final_con_fecha, f, ensure_ascii=False, indent=4)
@@ -230,6 +258,16 @@ def obtener_datos_gemini():
             print(f"ADVERTENCIA: No se pudo guardar el archivo JSON: {e}")
 
         return reporte_final_con_fecha
+        '''
+    
+        return JSONResponse(
+            status_code=201, 
+            content={
+                "estado": "Éxito", 
+                "mensaje": "Análisis completado y alertas guardadas en DB.",
+                "num_alertas": len(alertas_db)
+            }
+        )
         
     except Exception as e:
         print("Error al llamar a Gemini:", e)
