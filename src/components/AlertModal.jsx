@@ -44,10 +44,8 @@ function AlertModal({ alert, onClose }) {
             .
           </p>
           <p>
-            <strong>Descripción:</strong>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            posuere erat a ante. Pellentesque ultrices, dui eget ultricies,
-            felis nisl varius, vitae...
+            <strong>Descripción: </strong>
+            Descripción detallada de la alerta y las medidas recomendadas a seguir.
           </p>
         </div>
       </div>

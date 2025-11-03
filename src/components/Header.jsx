@@ -23,7 +23,7 @@ function Header() {
           </div>
           
           {/* Links de Navegación (Desktop) */}
-          <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+          {/*<div className="hidden sm:ml-6 sm:flex sm:space-x-8">
             <a
               href="/"
               className={`text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
@@ -43,21 +43,21 @@ function Header() {
               }`}
             >
               Reportes
-            </a>*/}
+            </a>
           </div>
 
-          {/* Íconos de la derecha (Usuario + Menú Móvil) */}
+          {/* Íconos de la derecha (Usuario + Menú Móvil)
           <div className="flex items-center">
-            {/* Ícono de Usuario (Siempre visible) */}
+            {/* Ícono de Usuario (Siempre visible) 
             {/*<button
               type="button"
               className="p-1 rounded-full text-white hover:text-orange-400"
             >
               <span className="sr-only">Ver perfil</span>
               <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
-            </button>*/}
+            </button>
 
-            {/* Botón de Menú Móvil (Solo en 'sm' y más pequeño) */}
+            {/* Botón de Menú Móvil (Solo en 'sm' y más pequeño) 
             <div className="ml-2 sm:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -78,7 +78,7 @@ function Header() {
         </div>
       </div>
 
-      {/* Panel del Menú Móvil */}
+      {/* Panel del Menú Móvil 
       <div
         className={`${isOpen ? 'block' : 'hidden'} sm:hidden`}
         id="mobile-menu"

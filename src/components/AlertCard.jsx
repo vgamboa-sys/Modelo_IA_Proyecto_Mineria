@@ -44,7 +44,7 @@ function AlertCard({ severity, severityText, title, timestamp, onShowDetails }) 
       
       <h3 className="text-xl font-bold text-gray-900 mt-1">{title}</h3>
             
-      <p className="text-gray-500 text-xs mt-3">{timestamp}</p>
+      <p className="text-m mt-3">{timestamp}</p>
       
       {/*Boton alineado a la derecha*/}
       <div className='flex justify-end'>
