@@ -1,6 +1,7 @@
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2, alertas_historial
+from backend.app.routers import alertas_historial_completo
+from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2
 from fastapi.middleware.cors import CORSMiddleware
 
 # --- Base de Datos ---
@@ -51,7 +52,7 @@ app.include_router(data_weather.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(cnx_IA.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(cnx_IA_v2.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(data_sismos.router, prefix="/datos", tags=["Datos Sismos"])
-app.include_router(alertas_historial.router, prefix="/datos", tags=["Alertas"])
+app.include_router(alertas_historial_completo.router, prefix="/datos", tags=["Alertas"])
 
 # --- Página Principal ---
 @app.get("/",tags=["Ruta /"])

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
@@ -16,25 +16,25 @@ def listar_alertas(
     limit: int = Query(50, ge=1, le=200, description="Cantidad máxima de alertas"),
     offset: int = Query(0, ge=0, description="Offset para paginación"),
     severidad: Optional[str] = Query(None, description="Filtrar por tipo_severidad (Alta/Media/Baja)"),
-    id_mina: Optional[int] = Query(None, description="Filtrar por id_mina"),
-    desde: Optional[datetime] = Query(None, description="Fecha mínima (YYYY-MM-DD)"),
-    hasta: Optional[datetime] = Query(None, description="Fecha máxima (YYYY-MM-DD)"),
+    id_mina: Optional[int] = Query(None, description="Filtrar por id_mina")
 ):
     """
     Devuelve alertas ordenadas por fecha descendente (últimas primero).
-    Sirve tanto para historial como para tarjetas del dashboard.
+    Tiene filtro para invocar ultimas alertas de 3 Horas.
     """
+    
+    # 1. Calcular punto de corte    
+    tiempo_limite = datetime.now() - timedelta(hours=3)
 
-    query = db.query(models.Alerta).order_by(models.Alerta.fecha.desc())
+    # 2. Query BASE (incluye filtro de 3 horas y orden)
+    query = db.query(models.Alerta) \
+              .filter(models.Alerta.fecha >= tiempo_limite) \
+              .order_by(models.Alerta.fecha.desc())
 
     if severidad:
         query = query.filter(models.Alerta.tipo_severidad == severidad)
     if id_mina:
         query = query.filter(models.Alerta.id_mina == id_mina)
-    if desde:
-        query = query.filter(models.Alerta.fecha >= desde)
-    if hasta:
-        query = query.filter(models.Alerta.fecha <= hasta)
-
+    
     alertas = query.offset(offset).limit(limit).all()
     return alertas
