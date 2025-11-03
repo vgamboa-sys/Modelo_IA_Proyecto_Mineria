@@ -1,7 +1,6 @@
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
-from backend.app.routers import alertas_historial_completo
-from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2
+from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2, alertas_historial_3H, alertas_historial_completo
 from fastapi.middleware.cors import CORSMiddleware
 
 # --- Base de Datos ---
