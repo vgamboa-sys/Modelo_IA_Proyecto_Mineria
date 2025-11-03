@@ -1,12 +1,17 @@
-import { useState } from 'react';
-import { UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { ShieldCheckIcon } from '@heroicons/react/24/solid';
+import { useState } from "react";
+import {
+  UserCircleIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   // Función para determinar si una ruta está activa (Falta ver si la pagina sera de una sola vista o no)
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
   const isActive = (route) => pathname === route;
 
   return (
@@ -15,13 +20,14 @@ function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo y Título */}
           <div className="shrink-0 flex items-center">
-              
             <a href="/" className="flex items-center">
               <img src="/icon.png" alt="SafeMine Logo" className="h-12 w-11" />
-              <span className="ml-2 text-xl font-sans text-white hidden sm:inline">SafeMine AI</span>
+              <span className="ml-2 text-xl font-sans text-white ">
+                SafeMine AI
+              </span>
             </a>
           </div>
-          
+
           {/* Links de Navegación (Desktop) */}
           {/*<div className="hidden sm:ml-6 sm:flex sm:space-x-8">
             <a
@@ -108,7 +114,6 @@ function Header() {
       </div>
     </nav>
   );
-  
 }
 
 export default Header;
