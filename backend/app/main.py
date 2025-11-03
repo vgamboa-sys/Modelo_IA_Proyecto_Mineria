@@ -53,6 +53,7 @@ app.include_router(cnx_IA.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(cnx_IA_v2.router, prefix="/datos", tags=["Datos Clima"])
 app.include_router(data_sismos.router, prefix="/datos", tags=["Datos Sismos"])
 app.include_router(alertas_historial_completo.router, prefix="/datos", tags=["Alertas"])
+app.include_router(alertas_historial_3H.router, prefix="/datos", tags=["Alertas"])
 
 # --- Página Principal ---
 @app.get("/",tags=["Ruta /"])

@@ -10,7 +10,7 @@ from schemas.alertas import AlertaItem
 
 router = APIRouter()
 
-@router.get("/alertas", response_model=List[AlertaItem], summary="Lista alertas desde la BD")
+@router.get("/alertas/3H", response_model=List[AlertaItem], summary="Lista alertas desde la BD (3H)")
 def listar_alertas(
     db: Session = Depends(get_db),
     limit: int = Query(50, ge=1, le=200, description="Cantidad máxima de alertas"),
