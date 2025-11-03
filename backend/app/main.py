@@ -1,6 +1,7 @@
 import uvicorn  # Para ejecutar el servidor
 from fastapi import FastAPI
 from routers import data_weather, cnx_IA, data_sismos, cnx_IA_v2
+from fastapi.middleware.cors import CORSMiddleware
 
 # --- Base de Datos ---
 from database.db import engine
@@ -29,6 +30,21 @@ app = FastAPI(
     description=v1_description,
     redoc_url=None)
     
+origins = [
+    "http://localhost:5173",                         # dev local
+    "http://127.0.0.1:5173",                         # dev local
+    "http://44.206.67.3:8000",                       # dev prod
+    "https://modelo-ia-proyecto-mineria.pages.dev",  # tu front
+
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # o ["*"] solo para pruebas
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Agregar routers ---
 app.include_router(data_weather.router, prefix="/datos", tags=["Datos Clima"])
