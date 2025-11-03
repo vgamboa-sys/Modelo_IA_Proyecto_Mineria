@@ -1,4 +1,5 @@
 from typing import List, Optional
+from datetime import datetime
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
@@ -16,6 +17,8 @@ def listar_alertas(
     offset: int = Query(0, ge=0, description="Offset para paginación"),
     severidad: Optional[str] = Query(None, description="Filtrar por tipo_severidad (Alta/Media/Baja)"),
     id_mina: Optional[int] = Query(None, description="Filtrar por id_mina"),
+    desde: Optional[datetime] = Query(None, description="Fecha mínima (YYYY-MM-DD)"),
+    hasta: Optional[datetime] = Query(None, description="Fecha máxima (YYYY-MM-DD)"),
 ):
     """
     Devuelve alertas ordenadas por fecha descendente (últimas primero).
@@ -28,6 +31,10 @@ def listar_alertas(
         query = query.filter(models.Alerta.tipo_severidad == severidad)
     if id_mina:
         query = query.filter(models.Alerta.id_mina == id_mina)
+    if desde:
+        query = query.filter(models.Alerta.fecha >= desde)
+    if hasta:
+        query = query.filter(models.Alerta.fecha <= hasta)
 
     alertas = query.offset(offset).limit(limit).all()
     return alertas
