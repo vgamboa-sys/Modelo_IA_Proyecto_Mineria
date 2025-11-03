@@ -52,15 +52,15 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
     Mapeo_Protocolo = {
         # --- RIESGOS COMBINADOS (Los más importantes) ---
         "alerta_hielo_escarcha": {
-            "titulo": "Hielo en Caminos",
+            "titulo": "Hielo en caminos",
             "protocolo": "Suspender tránsito, aplicar sal/material abrasivo, evaluar uso de cadenas."
         },
         "alerta_ventisca": {
-            "titulo": "Ventisca / Viento Blanco",
+            "titulo": "Ventisca / Viento blanco",
             "protocolo": "Detener todo tránsito de vehículos y personal, buscar refugio, activar plan de emergencia."
         },
         "alerta_polvo_viento": {
-            "titulo": "Polvo por Viento Fuerte",
+            "titulo": "Polvo por viento fuerte",
             "protocolo": "Reducir velocidad, usar luces, suspender tránsito si visibilidad es crítica. Humectar caminos."
         },
 
@@ -70,25 +70,25 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
             "protocolo": "Reducir exposición, rotar turnos, asegurar hidratación/abrigo."
         },
         "alerta_visibilidad_niebla": {
-            "titulo": "Niebla Densa",
+            "titulo": "Niebla densa",
             "protocolo": "Detener o restringir desplazamientos, usar señales adicionales, escolta."
         },
         "alerta_viento_fuerte": {
-            "titulo": "Viento Fuerte",
+            "titulo": "Viento fuerte",
             "protocolo": "Asegurar cargas, suspender operaciones de grúas/izaje."
         },
         "alerta_precipitacion_intensa": {
-            "titulo": "Precipitación Intensa",
+            "titulo": "Precipitación intensa",
             "protocolo": "Controlar escorrentías, asegurar drenajes, evaluar riesgo aluvional."
         },
         "alerta_calidad_aire": {
-            "titulo": "Calidad de Aire",
+            "titulo": "Calidad de aire",
             "protocolo": "Proveer EPP respiratorio, limitar actividades, monitoreo continuo."
         },
 
         # --- REPORTE DE ESTATUS (Si no hay riesgos) ---
         "condiciones_normales": {
-            "titulo": "Condiciones Normales",
+            "titulo": "Condiciones normales",
             "protocolo": "Operaciones continúan con normalidad."
         }
     }
@@ -152,10 +152,10 @@ def obtener_datos_gemini(db: Session = Depends(get_db)):
     EJEMPLOS DE SALIDA (Solo para referencia de formato):
 
     -   **Si hay riesgos (Ejemplo):**
-        `[ {{"categoria": "alerta_viento_fuerte", "severidad": "Alta", "titulo": "Viento Fuerte", "descripcion": "Riesgo por ráfagas de 25 m/s y vientos sostenidos de 15 m/s."}}, {{"categoria": "alerta_calidad_aire", "severidad": "Media", "titulo": "Calidad de Aire", "descripcion": "Niveles de PM2.5 superan los 40 ug/m3."}} ]`
+        `[ {{"categoria": "alerta_viento_fuerte", "severidad": "Alta", "titulo": "Viento fuerte", "descripcion": "Riesgo por ráfagas de 25 m/s y vientos sostenidos de 15 m/s."}}, {{"categoria": "alerta_calidad_aire", "severidad": "Media", "titulo": "Calidad de Aire", "descripcion": "Niveles de PM2.5 superan los 40 ug/m3."}} ]`
 
     -   **Si NO hay riesgos (Ejemplo):**
-        `[ {{"categoria": "condiciones_normales", "severidad": "Baja", "titulo": "Condiciones Normales", "descripcion": "Todos los parámetros operativos están dentro de rangos seguros."}} ]`
+        `[ {{"categoria": "condiciones_normales", "severidad": "Baja", "titulo": "Condiciones normales", "descripcion": "Todos los parámetros operativos están dentro de rangos seguros."}} ]`
     """
     # print (prompt) Para ver en consola si se cargó el prompt correctamente
 
