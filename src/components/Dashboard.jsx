@@ -34,6 +34,9 @@ const severityConfig = {
   },
 };
 
+// Intervalo de refresco en milisegundos (ej. 60000 ms = 1 minuto)
+const REFRESH_INTERVAL_MS = 60000;
+
 function Dashboard() {
   const [selectedTableSev, setSelectedTableSev] = useState("Todas");
   const severityOptions = ["Todas", "Alta", "Media", "Baja"];
@@ -46,10 +49,16 @@ function Dashboard() {
   const [loadingAlerts, setLoadingAlerts] = useState(true);
   const [errorAlerts, setErrorAlerts] = useState(null);
 
+  // --- EFECTO PARA CARGAR AMBOS CONJUNTOS DE ALERTAS CON REFRESCO AUTOMÁTICO ---
   useEffect(() => {
     const fetchAllAlerts = async () => {
-      setLoadingAlerts(true);
-      setErrorAlerts(null);
+      // No reseteamos loadingAlerts a true aquí para evitar un "flash" de carga
+      // en cada intervalo si el usuario ya está viendo datos.
+      // Solo lo ponemos a true en la primera carga, o si hay un error previo.
+      if (recentAlertData.length === 0 && fullAlertHistory.length === 0) {
+        setLoadingAlerts(true);
+      }
+      setErrorAlerts(null); // Siempre limpiar errores previos
 
       try {
         // --- 1. Cargar ALERTA RECIENTES PARA LAS TARJETAS (Últimas 3H, 3 por categoría) ---
@@ -60,36 +69,40 @@ function Dashboard() {
             headers: { "ngrok-skip-browser-warning": "true" },
           });
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status} for recent alerts of severity ${sev}`);
+            throw new Error(
+              `HTTP error! status: ${response.status} for recent alerts of severity ${sev}`
+            );
           }
           return response.json();
         });
 
         const allRecentResults = await Promise.all(recentAlertPromises);
         const combinedRecentAlerts = allRecentResults.flat();
-        const mappedRecentAlerts = (combinedRecentAlerts || []).map((alert) => ({
-          id: alert.id,
-          severity: alert.tipo_severidad,
-          severityText: `Severidad ${alert.tipo_severidad}`,
-          title: alert.titulo,
-          timestamp: new Date(alert.fecha).toLocaleString("es-CL"),
-          description: alert.descripcion,
-          protocolo: alert.protocolo,
-        }));
+        const mappedRecentAlerts = (combinedRecentAlerts || []).map(
+          (alert) => ({
+            id: alert.id,
+            severity: alert.tipo_severidad,
+            severityText: `Severidad ${alert.tipo_severidad}`,
+            title: alert.titulo,
+            timestamp: new Date(alert.fecha).toLocaleString("es-CL"),
+            description: alert.descripcion,
+            protocolo: alert.protocolo,
+          })
+        );
         setRecentAlertData(mappedRecentAlerts);
-        console.log("Alertas recientes cargadas (últimas 3H por severidad):", mappedRecentAlerts);
-
 
         // --- 2. Cargar HISTORIAL COMPLETO PARA LA TABLA ---
         const fullHistoryResponse = await fetch(
-          "https://dorsolumbar-elvera-conterminously.ngrok-free.dev/datos/alertas", 
+          "https://dorsolumbar-elvera-conterminously.ngrok-free.dev/datos/alertas",
           {
             headers: { "ngrok-skip-browser-warning": "true" },
           }
         );
 
         if (!fullHistoryResponse.ok) {
-          throw new Error(`HTTP error! status: ${fullHistoryResponse.status} for full history`);
+          throw new Error(
+            `HTTP error! status: ${fullHistoryResponse.status} for full history`
+          );
         }
 
         const fullHistoryData = await fullHistoryResponse.json();
@@ -103,23 +116,32 @@ function Dashboard() {
           protocolo: alert.protocolo,
         }));
         setFullAlertHistory(mappedFullHistory);
-        console.log("Historial completo de alertas cargado:", mappedFullHistory);
-
       } catch (e) {
         console.error("Error al obtener alertas:", e);
-        setErrorAlerts(`No se pudieron cargar todas las alertas. Detalles: ${e.message}`);
+        setErrorAlerts(
+          `No se pudieron cargar todas las alertas. Detalles: ${e.message}`
+        );
       } finally {
         setLoadingAlerts(false);
       }
     };
 
+    // Llamar la primera vez inmediatamente
     fetchAllAlerts();
-  }, []); 
 
-  // --- FILTRADO DE DATOS PARA LA TABLA 
+    // Configurar el intervalo para llamadas subsiguientes
+    const intervalId = setInterval(fetchAllAlerts, REFRESH_INTERVAL_MS);
+
+    // Función de limpieza: se ejecuta cuando el componente se desmonta
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // --- FILTRADO DE DATOS PARA LA TABLA (USA fullAlertHistory) ---
   const dataFiltradaTabla = useMemo(() => {
     if (selectedTableSev === "Todas") return fullAlertHistory;
-    return fullAlertHistory.filter((alert) => alert.severity === selectedTableSev);
+    return fullAlertHistory.filter(
+      (alert) => alert.severity === selectedTableSev
+    );
   }, [selectedTableSev, fullAlertHistory]);
 
   // --- DEFINICIÓN DE COLUMNAS DE LA TABLA ---
@@ -144,9 +166,9 @@ function Dashboard() {
     []
   );
 
-  // --- HOOK DE REACT-TABLE  ---
+  // --- HOOK DE REACT-TABLE (USA dataFiltradaTabla) ---
   const tabla = useReactTable({
-    data: dataFiltradaTabla, 
+    data: dataFiltradaTabla,
     columns: columnas,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -159,15 +181,12 @@ function Dashboard() {
     autoResetPageIndex: true,
   });
 
-
   const getBadgeClasses = (sev) => {
     const c = colorMap[sev] || { bg: "bg-gray-100", text: "text-gray-800" };
     return `${c.bg} ${c.text}`;
   };
 
-
   const severityOrder = ["Alta", "Media", "Baja"];
-
 
   const groupedRecentAlerts = severityOrder.reduce((acc, sev) => {
     acc[sev] = recentAlertData.filter((a) => a.severity === sev);
@@ -176,7 +195,6 @@ function Dashboard() {
 
   const hasRecentAlerts = recentAlertData.length > 0;
   const hasFullHistory = fullAlertHistory.length > 0;
-
 
   return (
     <div className="min-h-screen bg-gray-100 relative">
@@ -207,7 +225,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Sección Grilla de alertas */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             {loadingAlerts ? (
@@ -228,7 +245,8 @@ function Dashboard() {
               // Tu lógica de acordeón existente
               <div className="space-y-4 mt-4">
                 {severityOrder.map((sev) => {
-                  const items = groupedRecentAlerts[sev] || []; 
+                  const items = groupedRecentAlerts[sev] || [];
+                  // Solo muestra la sección si hay alertas para esa severidad
                   if (items.length === 0) return null;
 
                   const isOpen = openSection === sev;
@@ -301,19 +319,19 @@ function Dashboard() {
             )}
           </div>
 
-          {/* Widget de Sismos, tenemos que cambiar un poco el diseñoa aca */}
+          {/* Widget de Sismos (No cambia) */}
           <div className="lg:col-span-1">
             <SismosWidget />
           </div>
 
-          {/* Tabla Reporte de Alertas  */}
           <div className="lg:col-span-full flex justify-center">
             <div className="w-full bg-white p-6 rounded-xl shadow-sm border border-gray-200 mt-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Reporte de Alertas (Historial Completo)
-                </h2> {/* Texto actualizado */}
+                  Reporte de Historial de Alertas
+                </h2>
                 <FilterButton
+                  label="Criticidad" 
                   options={severityOptions}
                   selected={selectedTableSev}
                   onSelect={setSelectedTableSev}
@@ -341,7 +359,11 @@ function Dashboard() {
                           className="text-white text-center text-xs font-medium uppercase tracking-wider"
                         >
                           {headerGroup.headers.map((header) => (
-                            <th key={header.id} scope="col" className="px-4 py-3">
+                            <th
+                              key={header.id}
+                              scope="col"
+                              className="px-4 py-3"
+                            >
                               {header.isPlaceholder
                                 ? null
                                 : flexRender(
@@ -376,7 +398,7 @@ function Dashboard() {
               </div>
 
               {/* Controles de paginación */}
-              {hasFullHistory && ( 
+              {hasFullHistory && (
                 <div className="flex justify-center gap-1 sm:space-x-2 p-4 border-t border-gray-200">
                   {/* Botón de inicio */}
                   <button
