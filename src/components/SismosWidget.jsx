@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SignalIcon } from '@heroicons/react/24/solid'; 
+import { ArrowPathIcon, SignalIcon } from '@heroicons/react/24/solid'; 
 
 function SismosWidget() {
   const [sismos, setSismos] = useState([]);
@@ -11,7 +11,14 @@ function SismosWidget() {
     const fetchSismos = async () => {                           //http://44.206.67.3:8000/datos/api/alertas/sismos nueva api de sismos    //https://api.gael.cloud/general/public/sismos api vieja
       try {
         setLoading(true);
-        const response = await fetch('/datos/api/alertas/sismos');
+        //Nuevo
+        const API_BASE  = import.meta.env.VITE_API_URL || '';
+        const endpoint = '/datos/api/alertas/sismos'
+        const fullUrl = API_BASE + endpoint;
+
+        const response = await fetch(fullUrl);
+
+        //const response = await fetch('/datos/api/alertas/sismos');
         if (!response.ok) {
           throw new Error('No se pudo obtener la información');
         }
