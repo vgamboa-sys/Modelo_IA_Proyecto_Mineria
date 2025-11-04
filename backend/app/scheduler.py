@@ -44,7 +44,7 @@ def _job_ciclo_alerta():
       3) /datos/data_to_gemini_test  -> lee JSON(s), genera alerta(s) y las guarda en BD
     """
 
-    base_url = os.getenv("SCHED_BASE_URL", "44.206.67.3:8000")
+    base_url = os.getenv("SCHED_BASE_URL", "https://dorsolumbar-elvera-conterminously.ngrok-free.dev/")
 
     clima_url = f"{base_url}/datos/api/alertas/actual"
     sismos_url = f"{base_url}/datos/api/alertas/sismos"
