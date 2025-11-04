@@ -68,7 +68,7 @@ function Dashboard() {
         // --- 1. Cargar ALERTA RECIENTES PARA LAS TARJETAS (Últimas 3H, 3 por categoría) ---
         const severitiesToFetch = ["Alta", "Media", "Baja"];
         const recentAlertPromises = severitiesToFetch.map(async (sev) => {
-          const url = `https://dorsolumbar-elvera-conterminously.ngrok-free.dev/datos/alertas?limit=3&severidad=${sev}`;
+          const url = `https://dorsolumbar-elvera-conterminously.ngrok-free.dev/datos/alertas/3H?limit=3&severidad=${sev}`;
           const response = await fetch(url, {
             headers: { "ngrok-skip-browser-warning": "true" },
           });
