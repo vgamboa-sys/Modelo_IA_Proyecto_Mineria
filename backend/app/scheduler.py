@@ -77,7 +77,7 @@ def start():
 
     scheduler.add_job(
         _job_ciclo_alerta,
-        trigger=IntervalTrigger(minutes=15),  # cada x minutos
+        trigger=IntervalTrigger(minutes=5),  # cada x minutos
         id="job_ciclo_alerta",
         replace_existing=True,
         coalesce=True,
