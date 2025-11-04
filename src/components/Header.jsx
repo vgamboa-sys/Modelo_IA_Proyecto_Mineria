@@ -51,6 +51,13 @@ function Header() {
             </a>
           </div>
 
+          {/* Texto descriptivo a la derecha */}
+          <div className="hidden md:block">
+            <span className="text-white text-sm font-medium">
+              Monitoreo de datos sismológicos y climatológicos
+            </span>
+          </div>
+
           {/* Íconos de la derecha (Usuario + Menú Móvil)
           <div className="flex items-center">
             {/* Ícono de Usuario (Siempre visible) 
