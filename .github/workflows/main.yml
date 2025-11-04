@@ -51,6 +51,10 @@ jobs:
             pip install --upgrade pip
             pip install -r backend/app/requirements.txt
 
+            # Verificar dependencias instaladas (para comparar con requirements.txt)
+            echo "=== Dependencias instaladas (pip freeze) ==="
+            pip freeze
+
             # Copiar archivo .env si existe (para variables de entorno)
             # Asegúrate de tener tu archivo .env configurado en el servidor
 
@@ -62,6 +66,9 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            # Crear directorio para variables de entorno si no existe
+            sudo mkdir -p /etc/safemine
+
             # Crear archivo de servicio systemd
             sudo tee /etc/systemd/system/safemine.service > /dev/null <<EOF
             [Unit]
@@ -73,6 +80,7 @@ jobs:
             User=ubuntu
             WorkingDirectory=/home/ubuntu/safemine/backend/app
             Environment="PATH=/home/ubuntu/safemine/venv/bin"
+            EnvironmentFile=/etc/safemine/environment
             ExecStart=/home/ubuntu/safemine/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
             Restart=always
             RestartSec=10
