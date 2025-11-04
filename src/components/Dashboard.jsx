@@ -315,7 +315,7 @@ const toggleSection = (sev) => {
                     <div className="p-4 border-t border-gray-200 max-h-96 overflow-auto">
                         {/*Muestra el mensaje si no hay elementos */}
                         {items.length === 0 ? (
-                            <p className="text-sm text-gray-700 italic text-center">
+                            <p className="text-m text-gray-700 italic text-center">
                               No existen alertas recientes de criticidad {sev}.
                             </p>
                           ) : (
