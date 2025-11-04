@@ -53,7 +53,7 @@ function AlertCard({ severity, severityText, title, timestamp, onShowDetails }) 
           onClick={onShowDetails}
           className={`mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${colors.button}`}
         >
-          Ver Detalles
+          Ver detalles
         </button>
       </div>
     </div>

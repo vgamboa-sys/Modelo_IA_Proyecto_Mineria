@@ -24,10 +24,6 @@ function Header() {
               <img src="/icon.png" alt="SafeMine Logo" className="h-12 w-11" />
 
               <span className="ml-2 text-xl font-sans text-white sm:inline">SafeMine AI</span>
-
-              <span className="ml-2 text-xl font-sans text-white ">
-                SafeMine AI
-              </span>
             </a>
           </div>
 

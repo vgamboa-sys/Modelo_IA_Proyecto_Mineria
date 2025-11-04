@@ -124,7 +124,7 @@ function SismosWidget() {
                         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1 px-3 rounded-full text-xs transition duration-150 ease-in-out"
                         onClick={toggleLegend}
                     >
-                        {isLegendOpen ? 'Ocultar Leyenda' : 'Ver Leyenda'}
+                        {isLegendOpen ? 'Ocultar leyenda' : 'Ver leyenda'}
                     </button>
                 </div>
             </div>
