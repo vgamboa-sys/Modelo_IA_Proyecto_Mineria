@@ -23,11 +23,16 @@ function SismosWidget() {
         return 'bg-green-500 text-white';
     };
 
+    // Construye URL de Google Maps (búsqueda textual)
+    const buildMapsUrl = (refGeografica) => {
+        const q = encodeURIComponent(refGeografica || '');
+        return `https://www.google.com/maps/search/?api=1&query=${q}`;
+    };
+
     useEffect(() => {
         const fetchSismos = async () => {
             setLoading(true);
             setError(null);
-            // ... (Lógica de fetch, mapeo y setSismos es correcta)
             try {
                 const response = await fetch('https://dorsolumbar-elvera-conterminously.ngrok-free.dev/datos/api/alertas/sismos', {
                     headers: {
@@ -69,7 +74,6 @@ function SismosWidget() {
 
     // Contenido a renderizar
     let content;
-    // ... (La lógica de renderizado de content es correcta)
     if (loading) {
         content = <p className="text-gray-600 text-center py-4">Cargando sismos...</p>;
     } else if (error) {
@@ -89,8 +93,17 @@ function SismosWidget() {
                             {sismo.Magnitud}
                         </div>
                         <div className="flex-1 min-w-0">
+                            {/* <-- AQUI: RefGeografica como hipervínculo a Google Maps */}
                             <p className="text-sm font-semibold text-gray-900 truncate">
-                                {sismo.RefGeografica}
+                                <a
+                                    href={buildMapsUrl(sismo.RefGeografica)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline text-blue-700"
+                                    title={`Abrir "${sismo.RefGeografica}" en Google Maps`}
+                                >
+                                    {sismo.RefGeografica}
+                                </a>
                             </p>
                             <p className="text-xs text-gray-500">
                                 {sismo.Fecha} | Prof: {sismo.Profundidad} km
@@ -129,13 +142,8 @@ function SismosWidget() {
                 </div>
             </div>
 
-            {/* ✅ Nuevo Contenedor de Leyenda que ocupa todo el ancho y está en el flujo */}
-            <div 
-                // Usamos la misma lógica condicional, pero sin 'absolute' o 'z-index'
-                // Las clases 'w-full' y 'p-3' garantizan el rectángulo
-                className={`w-full transition-all duration-300 ${isLegendOpen ? 'block' : 'hidden'}`}
-            >
-                {/* Contenido de la Leyenda */}
+            {/* ✅ Nuevo Contenedor de Leyenda */}
+            <div className={`w-full transition-all duration-300 ${isLegendOpen ? 'block' : 'hidden'}`}>
                 <div className='p-2 bg-gray-100 rounded-lg shadow-inner border border-gray-200 text-gray-700 text-sm'>
                     <ul className=" ml-4 space-y-0.5 grid grid-cols-2 sm:grid-cols-3">
                         <li><span className='font-bold'>N:</span> Norte | <span className='font-bold'>S:</span> Sur</li>
