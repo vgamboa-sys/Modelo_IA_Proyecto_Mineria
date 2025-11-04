@@ -15,7 +15,7 @@ function Footer() {
             <hr className="my-3 border-gray-700" />
 
             <p className="text-lg">
-                Desarrollado por todo el equipo PPJ 14va Generación con mucho cariño ❤
+                Desarrollado por todo el equipo PPJ 14va Generación de ACL
             </p>
             </div>
         </div>
