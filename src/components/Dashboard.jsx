@@ -128,7 +128,7 @@ const toggleSection = (sev) => {
 
       } catch (e) {
         console.error("Error al obtener alertas:", e);
-        setErrorAlerts(`No se pudieron cargar todas las alertas. Detalles: ${e.message}`);
+        setErrorAlerts(`No se pudieron cargar todas las alertas.`);
       } finally {
         setLoadingAlerts(false);
       }
@@ -161,6 +161,17 @@ const toggleSection = (sev) => {
       },
       { header: "Descripción", accessorKey: "title" },
       { header: "Fecha y Hora", accessorKey: "timestamp" },
+      { 
+        header:  "Acciones",
+            id:"acciones",
+            cell: ({row})=> (
+                <button
+                onClick={()=> setSelectedAlert(row.original)}
+                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                >
+                    Ver Detalles
+                </button>
+            )}
     ],
     []
   );
@@ -212,7 +223,7 @@ const toggleSection = (sev) => {
               Alertas activas y su nivel de criticidad.
             </p>
           </div>
-          <div className="flex flex-col bg-gray-300 rounded-xl shadow-sm p-3 mb-4 md:mb-0 w-full max-w-5/6 md:max-w-1/4 mx-auto md:mx-0">
+          <div className="flex flex-col bg-gray-300 rounded-xl shadow-sm p-3 mb-4 md:mb-0 w-full max-w-5/6 md:max-w-1/4 mx-auto md:mx-0 md:mr-13">
             <div className="flex items-center justify-center mb-0">
               <img
                 src="/location.png"
@@ -250,7 +261,7 @@ const toggleSection = (sev) => {
               <div className="space-y-4 mt-4">
                 {severityOrder.map((sev) => {
                   const items = groupedRecentAlerts[sev] || []; 
-                  if (items.length === 0) return null;
+                  //if (items.length === 0) return null;
 
                   // 🟢 USO CORRECTO DEL SET: Verifica si esta severidad está en el Set
                   const isOpen = openSections.has(sev); 
@@ -287,7 +298,7 @@ const toggleSection = (sev) => {
                             className={`text-sm font-semibold px-2.5 py-0.5 rounded-full ${colors.text} ${colors.alertnumber}`}
                           >
                             {items.length}{" "}
-                            {items.length > 1 ? "alertas" : "alerta"}
+                            {items.length > 1 || items.length === 0? "alertas" : "alerta"}
                           </span>
                           <ChevronDownIcon
                             className={`h-6 w-6 text-gray-500 transition-transform ${
@@ -301,7 +312,13 @@ const toggleSection = (sev) => {
                           isOpen ? "block" : "hidden"
                         }`}
                       >
-                        <div className="p-4 border-t border-gray-200 max-h-96 overflow-auto">
+                    <div className="p-4 border-t border-gray-200 max-h-96 overflow-auto">
+                        {/*Muestra el mensaje si no hay elementos */}
+                        {items.length === 0 ? (
+                            <p className="text-sm text-gray-700 italic text-center">
+                              No existen alertas recientes de criticidad {sev}.
+                            </p>
+                          ) : (
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {items.map((alert, index) => (
                               <AlertCard
@@ -314,6 +331,7 @@ const toggleSection = (sev) => {
                               />
                             ))}
                           </div>
+                        )}
                         </div>
                       </div>
                     </div>
@@ -329,20 +347,20 @@ const toggleSection = (sev) => {
           </div>
 
           {/* Tabla Reporte de Alertas  */}
-          <div className="lg:col-span-full flex justify-center">
+          <div className="lg:col-span-full flex justify-center rounded-xl">
             <div className="w-full bg-white p-6 rounded-xl shadow-sm border border-gray-200 mt-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Historial de Alertas
                 </h2>
                 <FilterButton
-                  label = "Criticidad"
-                  options={severityOptions}
-                  selected={selectedTableSev}
-                  onSelect={setSelectedTableSev}
+                    label = "Criticidad"
+                    options={severityOptions}
+                    selected={selectedTableSev}
+                    onSelect={setSelectedTableSev}
                 />
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto rounded-xl">
                 {loadingAlerts ? (
                   <div className="p-4 text-center text-gray-500">
                     Cargando historial de alertas...

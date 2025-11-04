@@ -18,7 +18,7 @@ function Header() {
               
             <a href="/" className="flex items-center">
               <img src="/icon.png" alt="SafeMine Logo" className="h-12 w-11" />
-              <span className="ml-2 text-xl font-sans text-white hidden sm:inline">SafeMine AI</span>
+              <span className="ml-2 text-xl font-sans text-white sm:inline">SafeMine AI</span>
             </a>
           </div>
           
