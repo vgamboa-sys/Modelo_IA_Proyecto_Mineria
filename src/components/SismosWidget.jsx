@@ -96,11 +96,6 @@ function SismosWidget() {
                             {/* <-- AQUI: RefGeografica como hipervínculo a Google Maps */}
                             <p className="text-sm font-semibold text-gray-900 truncate">
                                 <a
-                                    href={buildMapsUrl(sismo.RefGeografica)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:underline text-blue-700"
-                                    title={`Abrir "${sismo.RefGeografica}" en Google Maps`}
                                 >
                                     {sismo.RefGeografica}
                                 </a>
