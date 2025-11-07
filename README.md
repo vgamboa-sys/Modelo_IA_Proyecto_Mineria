@@ -82,30 +82,24 @@ OPENWEATHER_API_KEY="tu-key-de-openweather"
 GEMINI_API_KEY="tu-key-de-gemini"
 ```
 
-
 #### 💻 Ejecución — Backend
 
-Por ahora la parte para obtener el clima desde la api, en `backend/api_get_clima/`:
-
-Desde la raíz del proyecto:
+Para iniciar el servidor backend, se debe iniciar desde la ruta backend/app el siguiente comando:
 
 ```bash
-python api_weather.py
+uvicorn main:app
 ```
+<img width="419" height="87" alt="image" src="https://github.com/user-attachments/assets/37d19b90-1acd-4c11-a144-200a3af89ff5" />
 
-Esto levantará el servidor, para probar abre el enlace indicado por la consola:
+En la ruta
 
 > 🌐 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-Esto no deberia mostrar nada, solo un mensaje : {"detail":"Not Found"}
+Debe mostrar un json de bienvenida que indica que el servidor se esta ejecutando correctamente.
 
-Para observar la documentación de la api este es el enlace:
+Para observar la documentación de la api, el enlace para swagger es:
 
 > 🌐 [http://127.0.0.1:8000/docs/](http://127.0.0.1:8000/docs/)
-
-Luego para ver lo que esta mostrando la api directamente:
-
-> 🌐 [http://127.0.0.1:8000/api/alertas/actual](http://127.0.0.1:8000/datos/api/alertas/actual)
 
 ---
 
